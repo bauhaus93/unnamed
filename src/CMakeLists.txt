@@ -4,3 +4,5 @@ add_sources(
 )
 
 add_subdirectory(logger)
+add_subdirectory(sdl_wrapper)
+add_subdirectory(exception)

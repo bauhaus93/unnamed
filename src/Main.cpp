@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "logger/Logger.h"
+#include "logger/StdLogger.h"
+#include "sdl_wrapper/SDLWrapper.h"
 
 using namespace std;
 
 int main(int argc, char** argv) {
-    Logger l { LogLevel::INFO };
+    SDLWrapper sdlWrapper {};
 
-    l.Info("SEAS");
     return 0;
 }

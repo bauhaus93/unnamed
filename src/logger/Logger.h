@@ -1,26 +1,32 @@
+#pragma once
+
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <memory>
 
 enum class LogLevel {
     DEBUG = 0,
     INFO = 1,
-    WARNING = 2,
+    WARN = 2,
     ERROR = 3
 };
 
 class Logger {
 
+protected:
     LogLevel        logLevel;
+    std::ostream&   outStream;
 
-    virtual void    Log(const char* level, const char *msg);
-    char*           CreateLogHeader(const char *level);
+    virtual void    Log(const std::string& msg);
+    std::string     CreateLogMessage(const std::string& level, const std::string& msg);
 
 public:
      explicit       Logger(LogLevel logLevel_);
+                    Logger(LogLevel logLevel_, std::ostream& outStream_);
 
-     void           Debug(const char* msg);
-     void           Info(const char* msg);
-     void           Warning(const char* msg);
-     void           Error(const char* msg);
+     void           Debug(const std::string& msg);
+     void           Info(const std::string& msg);
+     void           Warn(const std::string& msg);
+     void           Error(const std::string& msg);
 };
