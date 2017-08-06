@@ -26,13 +26,16 @@ class SDLWrapper {
 
 public:
 
-                    SDLWrapper(const std::string& windowTitle, int windowSizeX, int windowSizeY);
-                    ~SDLWrapper();
+                        SDLWrapper(const std::string& windowTitle, int windowSizeX, int windowSizeY);
+                        ~SDLWrapper();
 
-        void        RenderPrepare();
-        void        RenderPresent();
-        void        StartTimers();
-        Event       WaitEvent();
+        void            RenderPrepare();
+        void            RenderPresent();
+        void            StartTimers();
+        void            StopTimers();
+        Event           WaitEvent();
+
+        SDL_Renderer*   GetRenderer() const;
 
 };
 

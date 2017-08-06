@@ -1,5 +1,6 @@
 add_sources(
   Main.cpp
+  Game.cpp
 )
 
 add_subdirectory(logger)

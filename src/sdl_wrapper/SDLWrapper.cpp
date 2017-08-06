@@ -62,15 +62,7 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, int windowSizeX, int wind
 
 SDLWrapper::~SDLWrapper() {
 
-    if (timerRender != 0) {
-        SDL_RemoveTimer(timerRender);
-        INFO("Removed render timer");
-    }
-
-    if (timerUpdate != 0) {
-        SDL_RemoveTimer(timerUpdate);
-        INFO("Removed update timer");
-    }
+    StopTimers();
 
     if (renderer != nullptr) {
         SDL_DestroyRenderer(renderer);
@@ -119,6 +111,20 @@ void SDLWrapper::StartTimers() {
     INFO("Started render timer");
 }
 
+void SDLWrapper::StopTimers() {
+    if (timerRender != 0) {
+        SDL_RemoveTimer(timerRender);
+        timerRender = 0;
+        INFO("Removed render timer");
+    }
+
+    if (timerUpdate != 0) {
+        SDL_RemoveTimer(timerUpdate);
+        timerUpdate = 0;
+        INFO("Removed update timer");
+    }
+}
+
 Event SDLWrapper::WaitEvent() {
     SDL_Event sdlEvent;
     Event event{};
@@ -142,6 +148,10 @@ Event SDLWrapper::WaitEvent() {
     }
 
     return event;
+}
+
+SDL_Renderer* SDLWrapper::GetRenderer() const {
+    return renderer;
 }
 
 Uint32 RenderCallback(Uint32 interval, void* param) {
