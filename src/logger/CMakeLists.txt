@@ -1,4 +1,3 @@
-
 add_sources(
   Logger.cpp
   FileLogger.cpp

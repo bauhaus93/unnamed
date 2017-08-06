@@ -1,4 +1,3 @@
-
 add_sources(
   Main.cpp
 )
@@ -6,3 +5,4 @@ add_sources(
 add_subdirectory(logger)
 add_subdirectory(sdl_wrapper)
 add_subdirectory(exception)
+add_subdirectory(event)
