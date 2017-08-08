@@ -13,6 +13,10 @@
 #include "exception/GameException.h"
 #include "event/Event.h"
 #include "SDLException.h"
+#include "common/Color.h"
+#include "common/Point.h"
+#include "common/Size.h"
+#include "common/Rect.h"
 
 
 class SDLWrapper {
@@ -26,11 +30,18 @@ class SDLWrapper {
 
 public:
 
-                        SDLWrapper(const std::string& windowTitle, int windowSizeX, int windowSizeY);
+                        SDLWrapper(const std::string& windowTitle, const Size& windowSize);
                         ~SDLWrapper();
 
-        void            RenderPrepare();
-        void            RenderPresent();
+        void            ClearScene();
+        void            ShowScene();
+        void            SetDrawColor(const Color& color);
+        void            SetWindowTitle(const std::string& title);
+        void            ClearRenderTarget();
+        void            DrawLine(const Point& start, const Point& stop);
+        void            DrawRect(const Rect& rect);
+
+
         void            StartTimers();
         void            StopTimers();
         Event           WaitEvent();

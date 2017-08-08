@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    Game game{ 1024, 768 };
+    Game game{ Size { 1024, 768 } };
 
     game.Loop();
 

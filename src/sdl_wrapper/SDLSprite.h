@@ -9,9 +9,10 @@
 
 #include "SDLWrapper.h"
 #include "SDLException.h"
-#include "Rect.h"
+#include "common/Rect.h"
+#include "common/Size.h"
 
-class Sprite {
+class SDLSprite {
 
     SDLWrapper&         sdlWrapper;
     SDL_Texture*        texture;
@@ -19,10 +20,10 @@ class Sprite {
 
 public:
 
-                        Sprite(SDLWrapper& sdlWrapper_, int sizeX, int sizeY);
+                        SDLSprite(SDLWrapper& sdlWrapper_, const Size& size);
 
 
     void                SetAsRenderTarget();
-    void                Draw(const Rect& srcRect, const Rect& destRect);
+    void                Draw(const Rect& srcRect, const Rect& destRect) const;
 
 };

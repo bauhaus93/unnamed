@@ -1,6 +1,6 @@
 #include "SDLWrapper.h"
 
-SDLWrapper::SDLWrapper(const std::string& windowTitle, int windowSizeX, int windowSizeY):
+SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     window { nullptr },
     renderer { nullptr },
     timerRender { 0 },
@@ -40,8 +40,8 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, int windowSizeX, int wind
     window = SDL_CreateWindow(  windowTitle.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED,
                                 SDL_WINDOWPOS_UNDEFINED,
-                                windowSizeX,
-                                windowSizeY,
+                                windowSize.x,
+                                windowSize.y,
                                 SDL_WINDOW_OPENGL);
 
     if (window == nullptr) {
@@ -77,13 +77,38 @@ SDLWrapper::~SDLWrapper() {
     INFO("SDL quit");
 }
 
-void SDLWrapper::RenderPrepare() {
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+void SDLWrapper::ClearScene() {
     SDL_RenderClear(renderer);
 }
 
-void SDLWrapper::RenderPresent() {
+void SDLWrapper::ShowScene() {
     SDL_RenderPresent(renderer);
+}
+
+void SDLWrapper::ClearRenderTarget(){
+    if (SDL_SetRenderTarget(renderer, nullptr) == -1)
+        throw SDLException("SDL_SetRenderTarget");
+}
+
+void SDLWrapper::SetDrawColor(const Color& color) {
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+}
+
+void SDLWrapper::SetWindowTitle(const std::string& title){
+	SDL_SetWindowTitle(window, title.c_str());
+}
+
+void SDLWrapper::DrawLine(const Point& start, const Point& stop) {
+    if (SDL_RenderDrawLine(renderer, start.x, start.y, stop.x, stop.y) < 0) {
+        throw SDLException("SDL_DrawLine");
+    }
+}
+
+void SDLWrapper::DrawRect(const Rect& rect) {
+    SDL_Rect sdlRect { rect.x, rect.y, rect.w, rect.h };
+    if (SDL_RenderDrawRect(renderer, &sdlRect) < 0) {
+        throw SDLException("SDL_DrawRect");
+    }
 }
 
 void SDLWrapper::StartTimers() {
@@ -98,13 +123,13 @@ void SDLWrapper::StartTimers() {
         throw SDLException("SDL_RegisterEvents");
     }
 
-    timerUpdate = SDL_AddTimer(250, UpdateCallback, (void*)&eventTypeUpdate);
+    timerUpdate = SDL_AddTimer(10, UpdateCallback, (void*)&eventTypeUpdate);
     if (timerUpdate == 0) {
         throw SDLException("SDL_AddTimer");
     }
     INFO("Started update timer");
 
-    timerRender = SDL_AddTimer(250, RenderCallback, (void*)&eventTypeRender);
+    timerRender = SDL_AddTimer(50, RenderCallback, (void*)&eventTypeRender);
     if (timerRender == 0) {
         throw SDLException("SDL_AddTimer");
     }

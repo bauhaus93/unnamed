@@ -1,25 +1,25 @@
-#include "Sprite.h"
+#include "SDLSprite.h"
 
-Sprite::Sprite(SDLWrapper& sdlWrapper_, int sizeX, int sizeY):
+SDLSprite::SDLSprite(SDLWrapper& sdlWrapper_, const Size& size):
     sdlWrapper { sdlWrapper_ },
     texture { nullptr } {
 
     texture = SDL_CreateTexture(    sdlWrapper.GetRenderer(),
                                     SDL_PIXELFORMAT_RGBA8888,
                                     SDL_TEXTUREACCESS_TARGET,
-                                    sizeX,
-                                    sizeY);
+                                    size.x,
+                                    size.y);
     if (texture == nullptr) {
         throw SDLException("SDL_CreateTexture");
     }
 }
 
-void Sprite::SetAsRenderTarget(){
+void SDLSprite::SetAsRenderTarget(){
 	if (SDL_SetRenderTarget(sdlWrapper.GetRenderer(), texture) == -1)
 		throw SDLException("SDL_SetRenderTarget");
 }
 
-void Sprite::Draw(const Rect& srcRect, const Rect& destRect) {
+void SDLSprite::Draw(const Rect& srcRect, const Rect& destRect) const {
     SDL_Rect src { srcRect.x, srcRect.y, srcRect.w, srcRect.h };
     SDL_Rect dest { destRect.x, destRect.y, destRect.w, destRect.h };
 
