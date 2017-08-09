@@ -82,13 +82,46 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
                 col *= 0.9;
             else if (noise < 0.3)
                 col *= 0.95;
-            if (noise < 0.4) {
+            if (noise < 0.3) {
                 sdlWrapper.SetDrawColor(Color{  col,
                                                 col,
                                                 col,
                                                 0xFF });
                 sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
             }
+        }
+    }
+    sdlWrapper.SetDrawColor(Color{  0xFF,
+                                    0xFF,
+                                    0xFF,
+                                    0xFF });
+    sdlWrapper.DrawRect(spriteRect);
+    sdlWrapper.ClearRenderTarget();
+    return element;
+}
+
+
+
+AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect) {
+    AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+
+    atlas.SetAsRenderTarget();
+    sdlWrapper.SetDrawColor(Color{  0x50,
+                                    0x50,
+                                    0x50,
+                                    0xFF });
+    sdlWrapper.DrawFillRect(element.GetRect());
+    Rect spriteRect = element.GetRect();
+    for (int y = 0; y < rect.h; y++) {
+        for (int x = 0; x < rect.w; x++) {
+            double noise = floorVariationNoise.GetOctavedNoise(rect.x + x, rect.y + y, 6, 1.4, 0.0005);
+            noise = (1.0 + noise) / 2.0;
+            uint8_t col = 0x50 * noise;
+            sdlWrapper.SetDrawColor(Color{  col,
+                                            col,
+                                            col,
+                                            0xFF });
+            sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
         }
     }
     sdlWrapper.SetDrawColor(Color{  0xFF,
@@ -120,17 +153,4 @@ uint8_t LandscapeGenerator::GetNeighbourRockMask(const Rect& tileRect) {
         mask |= 8;
     }
     return mask;
-}
-
-AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect) {
-    AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
-
-    atlas.SetAsRenderTarget();
-    sdlWrapper.SetDrawColor(Color{  0x0,
-                                    0xFF,
-                                    0x0,
-                                    0xFF });
-    sdlWrapper.DrawFillRect(element.GetRect());
-    sdlWrapper.ClearRenderTarget();
-    return element;
 }
