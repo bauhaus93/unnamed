@@ -1,12 +1,12 @@
 #include "Tile.h"
 
-AtlasElement&   CreateAtlasElement(const Point& pos, Atlas& atlas, SDLWrapper& sdlWrapper);
 
 
-Tile::Tile(const Point& pos, Atlas& atlas, SDLWrapper& sdlWrapper):
+Tile::Tile(const Point& pos, AtlasElement& sprite_):
     rect { pos.x, pos.y, TILE_SIZE, TILE_SIZE },
     neighbour { nullptr, nullptr, nullptr, nullptr },
-    sprite { CreateAtlasElement(pos, atlas, sdlWrapper) } {
+    sprite { sprite_ },
+    rock { nullptr } {
 
 }
 
@@ -29,36 +29,6 @@ void Tile::SetNeighbour(Direction dir, Tile* tile) {
     neighbour[index] = tile;
 }
 
-void Tile::ExpandRow(int count, Atlas& atlas, SDLWrapper& sdlWrapper) {
-    Tile* currTile = this;
-
-    while (count-- > 0) {
-        Point currPos = currTile->GetPos();
-        Tile* nextTile = new Tile(  Point{  currPos.x + TILE_SIZE,
-                                            currPos.y },
-                                    atlas,
-                                    sdlWrapper);
-        currTile->SetNeighbour(Direction::EAST, nextTile);
-        nextTile->SetNeighbour(Direction::WEST, currTile);
-        currTile = nextTile;
-    }
-}
-
-void Tile::ExpandColumn(int count, Atlas& atlas, SDLWrapper& sdlWrapper) {
-    Tile* currTile = this;
-
-    while (count-- > 0) {
-        Point currPos = currTile->GetPos();
-        Tile* nextTile = new Tile(  Point{  currPos.x,
-                                            currPos.y + TILE_SIZE },
-                                    atlas,
-                                    sdlWrapper);
-        currTile->SetNeighbour(Direction::SOUTH, nextTile);
-        nextTile->SetNeighbour(Direction::NORTH, currTile);
-        currTile = nextTile;
-    }
-}
-
 Tile* Tile::GetNeighbour(Direction dir) const {
     return neighbour[static_cast<int>(dir)];
 }
@@ -68,23 +38,21 @@ Point Tile::GetPos() const {
 }
 
 void Tile::Draw(const Point& camera, const Point& offset) {
-    sprite.Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
+    if (HasRock())
+        rock->GetSprite().Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
+    else
+        sprite.Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
 }
 
+void Tile::AddRock(std::unique_ptr<Rock> rock_) {
+    if (rock != nullptr) {
+        WARN(StringFormat("Overwriting rock occurence on tile (%d/%d)", rect.x, rect.y));
+    }
+    rock = std::move(rock_);
+}
 
-AtlasElement& CreateAtlasElement(const Point& pos, Atlas& atlas, SDLWrapper& sdlWrapper) {
-
-    AtlasElement& element = atlas.AddElement(Size{ TILE_SIZE, TILE_SIZE });
-
-    atlas.SetAsRenderTarget();
-    sdlWrapper.SetDrawColor(Color{  static_cast<uint8_t>(pos.x % 256),
-                                    static_cast<uint8_t>(pos.y % 256),
-                                    static_cast<uint8_t>((pos.x + pos.y) % 256),
-                                    0xFF });
-    sdlWrapper.DrawFillRect(element.GetRect());
-    sdlWrapper.ClearRenderTarget();
-
-    return element;
+bool Tile::HasRock() const {
+    return rock != nullptr;
 }
 
 void LinkRows(Tile* topRow, Tile* botRow) {

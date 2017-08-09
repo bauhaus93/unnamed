@@ -126,6 +126,12 @@ void SDLWrapper::DrawFillRect(const Rect& rect) {
     }
 }
 
+void SDLWrapper::DrawPoint(const Point& point) {
+    if (SDL_RenderDrawPoint(renderer, point.x, point.y) < 0) {
+        throw SDLException("SDL_DrawRect");
+    }
+}
+
 void SDLWrapper::StartTimers() {
 
     eventTypeUpdate = SDL_RegisterEvents(2);

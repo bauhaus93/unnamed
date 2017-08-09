@@ -45,6 +45,7 @@ public:
         void                    DrawLine(const Point& start, const Point& stop);
         void                    DrawRect(const Rect& rect);
         void                    DrawFillRect(const Rect& rect);
+        void                    DrawPoint(const Point& point);
 
 
         void                    StartTimers();

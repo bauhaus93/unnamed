@@ -5,7 +5,8 @@ Game::Game(const Size& windowSize):
     sdlWrapper { "unnamed", windowSize },
     rng {},
     atlas { sdlWrapper, Size{ 50, 50 }, Size{ 4000, 4000 } },
-    map { Size{ 100, 100 }, atlas, sdlWrapper } {
+    landscapeGenerator { sdlWrapper, atlas, rng.Random() },
+    map { Size{ 40, 40 }, landscapeGenerator } {
 
     INFO(StringFormat("Game seed: %u", rng.GetSeed()));
 }

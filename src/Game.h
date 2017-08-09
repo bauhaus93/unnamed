@@ -9,13 +9,16 @@
 #include "atlas/Atlas.h"
 #include "atlas/NoAtlasSpaceException.h"
 #include "map/Map.h"
+#include "map/LandscapeGenerator.h"
 
 class Game {
 
-    SDLWrapper      sdlWrapper;
-    Rng             rng;
-    Atlas           atlas;
-    Map             map;
+    SDLWrapper          sdlWrapper;
+    Rng                 rng;
+    Atlas               atlas;
+    LandscapeGenerator  landscapeGenerator;
+    Map                 map;
+
 
     void            Render();
     void            Update();

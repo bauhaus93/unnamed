@@ -1,32 +1,14 @@
 #include "Map.h"
 
-
-
-Map::Map(const Size& size_, Atlas& atlas, SDLWrapper& sdlWrapper):
+Map::Map(const Size& size_, LandscapeGenerator& landscapeGenerator_):
     size { size_ },
-    root {  new Tile(   Point{ 0, 0 },
-                        atlas,
-                        sdlWrapper) },
+    landscapeGenerator { landscapeGenerator_ },
+    root { landscapeGenerator.Generate(Rect{ 0, 0, size.x, size.y }) },
     camera { root } {
 
-    INFO(StringFormat("Creating map %dx%d", size.x, size.y));
+    
 
-    root->ExpandColumn(size.y - 1, atlas, sdlWrapper);
-    Tile* currTile = root;
-    Tile* nextTile = root->GetNeighbour(Direction::SOUTH);
 
-    currTile->ExpandRow(size.x - 1, atlas, sdlWrapper);
-    while (currTile != nullptr) {
-
-        if (nextTile != nullptr) {
-            nextTile->ExpandRow(size.x - 1, atlas, sdlWrapper);
-            LinkRows(currTile, nextTile);
-        }
-        currTile = nextTile;
-        if (nextTile != nullptr) {
-            nextTile = nextTile->GetNeighbour(Direction::SOUTH);
-        }
-    }
 }
 
 Map::~Map() {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "common/Point.h"
 #include "common/Color.h"
 #include "common/Rng.h"
@@ -8,7 +10,7 @@
 #include "atlas/AtlasElement.h"
 #include "sdl_wrapper/SDLWrapper.h"
 #include "logger/StdLogger.h"
-
+#include "Rock.h"
 
 #define TILE_SIZE 50
 
@@ -21,20 +23,21 @@ enum class Direction {
 
 class Tile {
 
-    Rect                rect;
-    Tile*               neighbour[4];
-    AtlasElement&       sprite;
+    Rect                    rect;
+    Tile*                   neighbour[4];
+    AtlasElement&           sprite;
+    std::unique_ptr<Rock>   rock;
 
 public:
 
-                        Tile(const Point& pos, Atlas& atlas, SDLWrapper& sdlWrapper);
+                        Tile(const Point& pos, AtlasElement& sprite_);
         void            SetNeighbour(Direction dir, Tile* tile);
-        void            ExpandRow(int count, Atlas& atlas, SDLWrapper& sdlWrapper);
-        void            ExpandColumn(int count, Atlas& atlas, SDLWrapper& sdlWrapper);
 
         Tile*           GetNeighbour(Direction dir) const;
         Point           GetPos() const;
         void            Draw(const Point& camera, const Point& offset);
+        void            AddRock(std::unique_ptr<Rock> rock_);
+        bool            HasRock() const;
 
  };
 
