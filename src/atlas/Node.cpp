@@ -5,26 +5,21 @@ Node::Node(const Rect& rect_):
     subTree { nullptr, nullptr, nullptr, nullptr },
     element { nullptr },
     rect { rect_ } {
-    char msg[100];
 
-    snprintf(msg, 100, "Creating atlas node (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
-    INFO(msg);
 }
 
 
-int Node::ExpandTree(int depth) {
+void Node::ExpandTree() {
     Size subSize { rect.w / 2, rect.h / 2 };
-    int subCount = 4;
+
+    if (subSize.x <= 0 || subSize.y <= 0)
+        return;
 
     subTree[0] = std::make_unique<Node>(Rect{ rect.x, rect.y, subSize.x, subSize.y });
     subTree[1] = std::make_unique<Node>(Rect{ rect.x + subSize.x, rect.y, subSize.x, subSize.y });
     subTree[2] = std::make_unique<Node>(Rect{ rect.x, rect.y + subSize.y, subSize.x, subSize.y });
     subTree[3] = std::make_unique<Node>(Rect{ rect.x + subSize.x, rect.y + subSize.y, subSize.x, subSize.y });
-    if (depth - 1 > 0) {
-        for(int i = 0; i < 4; i++)
-            subCount += subTree[i]->ExpandTree(depth - 1);
-    }
-    return subCount;
+
 }
 
 bool Node::HasElement() const {
@@ -35,6 +30,10 @@ bool Node::HasSubTree() const {
     return subTree[0] != nullptr;
 }
 
+bool Node::IsLeaf() const {
+    return !HasElement() && !HasSubTree();
+}
+
 bool Node::FitsInMe(const Size& size) const {
     return size.x <= rect.w && size.y <= rect.h;
 }
@@ -42,7 +41,6 @@ bool Node::FitsInMe(const Size& size) const {
 bool Node::FitsInSubTree(const Size& size) const {
     return size.x <= rect.w / 2 && size.y <= rect.h / 2;
 }
-
 
 bool Node::IsSubTreeEmpty() const {
     if (HasSubTree()) {
@@ -55,32 +53,53 @@ bool Node::IsSubTreeEmpty() const {
     return !HasElement();
 }
 
-void Node::DestroySubTree() {
-    for (int i = 0; i < 4; i++) {
-        subTree[i] = nullptr;
+Size Node::MaxSubtreeSpace() const {
+    if (HasElement()) {
+       return Size{ 0, 0 };
+    }
+    else if (!HasSubTree()) {
+        return Size{ rect.w, rect.h };
+    }
+    else {
+        Size maxSize = subTree[0]->MaxSubtreeSpace();
+        for(int i = 1; i < 4; i++) {
+            Size currSize = subTree[i]->MaxSubtreeSpace();
+            if (std::min(currSize.x, currSize.y) > std::min(maxSize.x, maxSize.y)) {
+                maxSize = currSize;
+            }
+        }
+        return maxSize;
     }
 }
 
 AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
+    DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
-    if (!FitsInSubTree(size) || !HasSubTree()) {
-        if (!HasElement() && FitsInMe(size) && IsSubTreeEmpty()) {
-            element = std::make_unique<AtlasElement>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
-            DestroySubTree();
-            char msg[200];
-            snprintf(msg, 200, "New atlas element (%d, %d, %d, %d) in %d/%d", rect.x, rect.y, size.x, size.y, rect.w, rect.h);
-            INFO(msg);
-            return *element;
+    if (FitsInSubTree(size)) {
+        if (!HasSubTree()) {
+            ExpandTree();
+            DEBUG("Expanded tree");
+            return subTree[0]->AddElement(size, atlasSprite);
         }
-    }
-    else if (HasSubTree()) {
-        for (int i = 0; i < 4; i++) {
-            try {
-                return subTree[i]->AddElement(size, atlasSprite);
-            }
-            catch (const SubTreeFullException& e) {
+        else {
+            for(int i = 0; i < 4; i++) {
+                Size maxSize = subTree[i]->MaxSubtreeSpace();
+                DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
+                if (size.x <= maxSize.x && size.y <= maxSize.y) {
+                    return subTree[i]->AddElement(size, atlasSprite);
+                }
             }
         }
     }
-    throw SubTreeFullException();
+    else if (FitsInMe(size) && IsLeaf()){
+        element = std::make_unique<AtlasElement>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
+        DEBUG(StringFormat("New atlas element (%d, %d, %d, %d) in %d/%d",   rect.x,
+                                                                            rect.y,
+                                                                            size.x,
+                                                                            size.y,
+                                                                            rect.w,
+                                                                            rect.h));
+        return *element;
+    }
+    throw NoAtlasSpaceException(size);
 }

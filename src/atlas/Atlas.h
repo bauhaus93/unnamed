@@ -7,6 +7,7 @@
 #include "common/Size.h"
 #include "common/Rect.h"
 #include "common/Point.h"
+#include "exception/GameException.h"
 #include "Node.h"
 #include "AtlasElement.h"
 
@@ -20,7 +21,7 @@ class Atlas {
 
 public:
 
-                            Atlas(SDLWrapper& sdlWrapper, const Size& size, int depth);
+                            Atlas(SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
         AtlasElement&       AddElement(const Size& size);
         void                Draw(const Rect& rect) const;
         void                SetAsRenderTarget();

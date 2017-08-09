@@ -17,6 +17,7 @@
 #include "common/Point.h"
 #include "common/Size.h"
 #include "common/Rect.h"
+#include "common/StringFormat.h"
 
 
 class SDLWrapper {
@@ -40,6 +41,7 @@ public:
         void            ClearRenderTarget();
         void            DrawLine(const Point& start, const Point& stop);
         void            DrawRect(const Rect& rect);
+        void            DrawFillRect(const Rect& rect);
 
 
         void            StartTimers();

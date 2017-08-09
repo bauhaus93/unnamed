@@ -3,8 +3,10 @@
 
 Game::Game(const Size& windowSize):
     sdlWrapper { "unnamed", windowSize },
-    atlas { sdlWrapper, Size{ 500, 500 }, 6 } {
+    rng {},
+    atlas { sdlWrapper, Size{ 40, 40 }, Size{ 1000, 1000 } } {
 
+    INFO(StringFormat("Game seed: %u", rng.GetSeed()));
 }
 
 void Game::Loop() {
@@ -45,18 +47,17 @@ void Game::Render() {
 }
 
 void Game::Update() {
-    static Size size { 7, 7 };
 
-    sdlWrapper.SetDrawColor(Color { 0xFF, 0xFF, 0, 0xFF });
+    sdlWrapper.SetDrawColor(Color { rng.Random(0, 256), rng.Random(0, 256), rng.Random(0, 256), 0xFF });
     atlas.SetAsRenderTarget();
     try {
+        //Size size { rng.Random(15, 20), rng.Random(15, 20) };
+        Size size { 40, 40 };
         auto e = atlas.AddElement(size);
-        sdlWrapper.DrawRect(e.GetRect());
-        //size.x += 10;
-        //size.y += 10;
+        sdlWrapper.DrawFillRect(e.GetRect());
     }
-    catch (const SubTreeFullException& e) {
-        INFO("SUBTREE full");
+    catch (const NoAtlasSpaceException&) {
+        INFO("Atlas is full");
     }
     sdlWrapper.ClearRenderTarget();
 }

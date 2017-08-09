@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <algorithm>
 
 #include "common/Rect.h"
 #include "common/Size.h"
+#include "common/StringFormat.h"
 #include "logger/StdLogger.h"
 #include "AtlasElement.h"
-#include "SubTreeFullException.h"
+#include "NoAtlasSpaceException.h"
 
 class Node {
 
@@ -15,14 +17,15 @@ class Node {
     Rect                            rect;
 
 public:
-                                Node(const Rect& Rect_);
-    int                         ExpandTree(int depth);
+    explicit                    Node(const Rect& Rect_);
+    void                        ExpandTree();
     bool                        HasElement() const;
     bool                        HasSubTree() const;
+    bool                        IsLeaf() const;
     bool                        FitsInMe(const Size& size) const;
     bool                        FitsInSubTree(const Size& size) const;
+    Size                        MaxSubtreeSpace() const;
     bool                        IsSubTreeEmpty() const;
-    void                        DestroySubTree();
     AtlasElement&               AddElement(const Size& size, SDLSprite& atlasSprite);
 
 };

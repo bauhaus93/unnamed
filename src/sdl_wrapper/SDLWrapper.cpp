@@ -20,21 +20,26 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
 
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
-    char msg[50];
 
-    snprintf(msg, 50, "Compiled with SDL %d.%d.%d", compiled.major,
+    INFO(StringFormat("Compiled with SDL %d.%d.%d", compiled.major,
                                                     compiled.minor,
-                                                    compiled.patch);
-    INFO(msg);
+                                                    compiled.patch));
 
-    snprintf(msg, 50, "Linked against SDL %d.%d.%d",    compiled.major,
-                                                        compiled.minor,
-                                                        compiled.patch);
-    INFO(msg);
+
+    INFO(StringFormat("Linked against SDL %d.%d.%d",    linked.major,
+                                                        linked.minor,
+                                                        linked.patch));
+
     if (compiled.major != linked.major ||
         compiled.minor != linked.minor ||
         compiled.patch != linked.patch) {
-            WARN("SDL compiled/linked versions do not match");
+            WARN(StringFormat("SDL compiled/linked versions do not match: %d.%d.%d/%d.%d.%d",
+                compiled.major,
+                compiled.minor,
+                compiled.patch,
+                linked.major,
+                linked.minor,
+                linked.patch));
     }
 
     window = SDL_CreateWindow(  windowTitle.c_str(),
@@ -47,7 +52,7 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     if (window == nullptr) {
         throw SDLException("SDL_CreateWindow");
     }
-    INFO("Created window");
+    INFO(StringFormat("Created window %dx%d", windowSize.x, windowSize.y));
 
     renderer = SDL_CreateRenderer(  window,
                                     -1,
@@ -107,6 +112,13 @@ void SDLWrapper::DrawLine(const Point& start, const Point& stop) {
 void SDLWrapper::DrawRect(const Rect& rect) {
     SDL_Rect sdlRect { rect.x, rect.y, rect.w, rect.h };
     if (SDL_RenderDrawRect(renderer, &sdlRect) < 0) {
+        throw SDLException("SDL_DrawRect");
+    }
+}
+
+void SDLWrapper::DrawFillRect(const Rect& rect) {
+    SDL_Rect sdlRect { rect.x, rect.y, rect.w, rect.h };
+    if (SDL_RenderFillRect(renderer, &sdlRect) < 0) {
         throw SDLException("SDL_DrawRect");
     }
 }
