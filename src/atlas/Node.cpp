@@ -4,7 +4,8 @@
 Node::Node(const Rect& rect_):
     subTree { nullptr, nullptr, nullptr, nullptr },
     element { nullptr },
-    rect { rect_ } {
+    rect { rect_ },
+    subSpace { rect.w, rect.h } {
 
 }
 
@@ -19,6 +20,7 @@ void Node::ExpandTree() {
     subTree[1] = std::make_unique<Node>(Rect{ rect.x + subSize.x, rect.y, subSize.x, subSize.y });
     subTree[2] = std::make_unique<Node>(Rect{ rect.x, rect.y + subSize.y, subSize.x, subSize.y });
     subTree[3] = std::make_unique<Node>(Rect{ rect.x + subSize.x, rect.y + subSize.y, subSize.x, subSize.y });
+    subSpace = subSize;
 
 }
 
@@ -53,23 +55,19 @@ bool Node::IsSubTreeEmpty() const {
     return !HasElement();
 }
 
-Size Node::MaxSubtreeSpace() const {
-    if (HasElement()) {
-       return Size{ 0, 0 };
-    }
-    else if (!HasSubTree()) {
-        return Size{ rect.w, rect.h };
-    }
-    else {
-        Size maxSize = subTree[0]->MaxSubtreeSpace();
-        for(int i = 1; i < 4; i++) {
-            Size currSize = subTree[i]->MaxSubtreeSpace();
-            if (std::min(currSize.x, currSize.y) > std::min(maxSize.x, maxSize.y)) {
-                maxSize = currSize;
-            }
+Size Node::GetSubSpace() const {
+    return subSpace;
+}
+
+void Node::RecalculateSubSpace() {
+    Size maxSize = subTree[0]->GetSubSpace();
+    for(int i = 1; i < 4; i++) {
+        Size currSize = subTree[i]->GetSubSpace();
+        if (std::min(currSize.x, currSize.y) > std::min(maxSize.x, maxSize.y)) {
+            maxSize = currSize;
         }
-        return maxSize;
     }
+    subSpace = maxSize;
 }
 
 AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
@@ -79,14 +77,18 @@ AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
         if (!HasSubTree()) {
             ExpandTree();
             DEBUG("Expanded tree");
-            return subTree[0]->AddElement(size, atlasSprite);
+            AtlasElement& element = subTree[0]->AddElement(size, atlasSprite);
+            RecalculateSubSpace();
+            return element;
         }
         else {
             for(int i = 0; i < 4; i++) {
-                Size maxSize = subTree[i]->MaxSubtreeSpace();
+                Size maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
                 if (size.x <= maxSize.x && size.y <= maxSize.y) {
-                    return subTree[i]->AddElement(size, atlasSprite);
+                    AtlasElement& element = subTree[i]->AddElement(size, atlasSprite);
+                    RecalculateSubSpace();
+                    return element;
                 }
             }
         }
@@ -99,6 +101,7 @@ AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
                                                                             size.y,
                                                                             rect.w,
                                                                             rect.h));
+        subSpace = Size{ 0, 0 };
         return *element;
     }
     throw NoAtlasSpaceException(size);

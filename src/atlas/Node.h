@@ -15,6 +15,7 @@ class Node {
     std::unique_ptr<Node>           subTree[4];
     std::unique_ptr<AtlasElement>   element;
     Rect                            rect;
+    Size                            subSpace;
 
 public:
     explicit                    Node(const Rect& Rect_);
@@ -24,7 +25,8 @@ public:
     bool                        IsLeaf() const;
     bool                        FitsInMe(const Size& size) const;
     bool                        FitsInSubTree(const Size& size) const;
-    Size                        MaxSubtreeSpace() const;
+    Size                        GetSubSpace() const;
+    void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
     AtlasElement&               AddElement(const Size& size, SDLSprite& atlasSprite);
 

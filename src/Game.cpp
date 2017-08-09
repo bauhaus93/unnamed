@@ -29,7 +29,7 @@ void Game::Loop() {
             quit = true;
             break;
         case EventType::KEY_DOWN:
-            HandleKeyDown(dynamic_cast<EventKeyDown&>(*event));
+            HandleKeyDown(static_cast<EventKeyDown&>(*event));
             break;
         default:
             WARN("Unknown event");
