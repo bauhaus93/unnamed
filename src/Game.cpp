@@ -4,7 +4,8 @@
 Game::Game(const Size& windowSize):
     sdlWrapper { "unnamed", windowSize },
     rng {},
-    atlas { sdlWrapper, Size{ 40, 40 }, Size{ 1000, 1000 } } {
+    atlas { sdlWrapper, Size{ 50, 50 }, Size{ 4000, 4000 } },
+    map { Size{ 100, 100 }, atlas, sdlWrapper } {
 
     INFO(StringFormat("Game seed: %u", rng.GetSeed()));
 }
@@ -15,8 +16,8 @@ void Game::Loop() {
     sdlWrapper.StartTimers();
 
     while (!quit) {
-        Event event = sdlWrapper.WaitEvent();
-        switch (event.GetType()) {
+        auto event = sdlWrapper.WaitEvent();
+        switch (event->GetType()) {
         case EventType::RENDER:
             Render();
             break;
@@ -26,6 +27,9 @@ void Game::Loop() {
         case EventType::QUIT:
             INFO("Received quit event");
             quit = true;
+            break;
+        case EventType::KEY_DOWN:
+            HandleKeyDown(dynamic_cast<EventKeyDown&>(*event));
             break;
         default:
             WARN("Unknown event");
@@ -40,24 +44,23 @@ void Game::Render() {
 
     sdlWrapper.SetDrawColor(Color { 0, 0, 0, 0xFF });
     sdlWrapper.ClearScene();
-    atlas.Draw(Rect { 0, 0, 500, 500 });
-    sdlWrapper.SetDrawColor(Color { 0xFF, 0, 0, 0xFF });
-    sdlWrapper.DrawRect(Rect { 0, 0, 500, 500 });
+    map.Draw(Rect{ 0, 0, 500, 500 });
+    atlas.Draw(Rect{ 0, 550, 200, 200 });
+    sdlWrapper.SetDrawColor(Color { 0xFF, 0xFF, 0xFF, 0xFF });
+    sdlWrapper.DrawRect(Rect{ 0, 550, 200, 200 });
     sdlWrapper.ShowScene();
 }
 
 void Game::Update() {
 
-    sdlWrapper.SetDrawColor(Color { rng.Random(0, 256), rng.Random(0, 256), rng.Random(0, 256), 0xFF });
-    atlas.SetAsRenderTarget();
-    try {
-        //Size size { rng.Random(15, 20), rng.Random(15, 20) };
-        Size size { 40, 40 };
-        auto e = atlas.AddElement(size);
-        sdlWrapper.DrawFillRect(e.GetRect());
+}
+
+void Game::HandleKeyDown(EventKeyDown& event) {
+    switch (event.GetKey()) {
+    case Key::UP:       map.MoveCamera(Direction::NORTH);   break;
+    case Key::DOWN:     map.MoveCamera(Direction::SOUTH);   break;
+    case Key::LEFT:     map.MoveCamera(Direction::WEST);    break;
+    case Key::RIGHT:    map.MoveCamera(Direction::EAST);    break;
+    default:            INFO("Unhandled key pressed");      break;
     }
-    catch (const NoAtlasSpaceException&) {
-        INFO("Atlas is full");
-    }
-    sdlWrapper.ClearRenderTarget();
 }

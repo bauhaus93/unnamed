@@ -1,5 +1,8 @@
 #include "SDLWrapper.h"
 
+Uint32 RenderCallback(Uint32 delay, void* params);
+Uint32 UpdateCallback(Uint32 delay, void* params);
+
 SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     window { nullptr },
     renderer { nullptr },
@@ -135,7 +138,7 @@ void SDLWrapper::StartTimers() {
         throw SDLException("SDL_RegisterEvents");
     }
 
-    timerUpdate = SDL_AddTimer(10, UpdateCallback, (void*)&eventTypeUpdate);
+    timerUpdate = SDL_AddTimer(200, UpdateCallback, (void*)&eventTypeUpdate);
     if (timerUpdate == 0) {
         throw SDLException("SDL_AddTimer");
     }
@@ -162,23 +165,36 @@ void SDLWrapper::StopTimers() {
     }
 }
 
-Event SDLWrapper::WaitEvent() {
+std::unique_ptr<Event> SDLWrapper::WaitEvent() {
     SDL_Event sdlEvent;
-    Event event{};
+    std::unique_ptr<Event> event = nullptr;
 
-    while (event.GetType() == EventType::NONE) {
+    while (event == nullptr) {
 
         if (SDL_WaitEvent(&sdlEvent) == 0) {
             throw SDLException("SDL_WaitEvent");
         }
-        if (sdlEvent.type == eventTypeRender)
-            event.SetType(EventType::RENDER);
-        else if (sdlEvent.type == eventTypeUpdate)
-            event.SetType(EventType::UPDATE);
+        if (sdlEvent.type == eventTypeRender) {
+            event = std::make_unique<Event>(EventType::RENDER);
+        }
+        else if (sdlEvent.type == eventTypeUpdate) {
+            event = std::make_unique<Event>(EventType::UPDATE);
+        }
         else {
             switch (sdlEvent.type){
             case SDL_QUIT:
-                event.SetType(EventType::QUIT);
+                event = std::make_unique<Event>(EventType::QUIT);
+                break;
+            case SDL_KEYDOWN:
+                Key key;
+                switch(sdlEvent.key.keysym.sym) {
+                case SDLK_UP: key = Key::UP;          break;
+                case SDLK_DOWN: key = Key::DOWN;      break;
+                case SDLK_LEFT: key = Key::LEFT;      break;
+                case SDLK_RIGHT: key = Key::RIGHT;    break;
+                default: key = Key::UNKNOWN;          break;
+                }
+                event = std::make_unique<EventKeyDown>(key);
                 break;
             }
         }

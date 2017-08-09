@@ -8,16 +8,19 @@
 #endif
 
 #include <string>
+#include <memory>
 
 #include "logger/StdLogger.h"
 #include "exception/GameException.h"
 #include "event/Event.h"
+#include "event/EventKeyDown.h"
 #include "SDLException.h"
 #include "common/Color.h"
 #include "common/Point.h"
 #include "common/Size.h"
 #include "common/Rect.h"
 #include "common/StringFormat.h"
+
 
 
 class SDLWrapper {
@@ -31,26 +34,23 @@ class SDLWrapper {
 
 public:
 
-                        SDLWrapper(const std::string& windowTitle, const Size& windowSize);
-                        ~SDLWrapper();
+                                SDLWrapper(const std::string& windowTitle, const Size& windowSize);
+                                ~SDLWrapper();
 
-        void            ClearScene();
-        void            ShowScene();
-        void            SetDrawColor(const Color& color);
-        void            SetWindowTitle(const std::string& title);
-        void            ClearRenderTarget();
-        void            DrawLine(const Point& start, const Point& stop);
-        void            DrawRect(const Rect& rect);
-        void            DrawFillRect(const Rect& rect);
+        void                    ClearScene();
+        void                    ShowScene();
+        void                    SetDrawColor(const Color& color);
+        void                    SetWindowTitle(const std::string& title);
+        void                    ClearRenderTarget();
+        void                    DrawLine(const Point& start, const Point& stop);
+        void                    DrawRect(const Rect& rect);
+        void                    DrawFillRect(const Rect& rect);
 
 
-        void            StartTimers();
-        void            StopTimers();
-        Event           WaitEvent();
+        void                    StartTimers();
+        void                    StopTimers();
+        std::unique_ptr<Event>  WaitEvent();
 
-        SDL_Renderer*   GetRenderer() const;
+        SDL_Renderer*           GetRenderer() const;
 
 };
-
-Uint32 RenderCallback(Uint32 delay, void* params);
-Uint32 UpdateCallback(Uint32 delay, void* params);
