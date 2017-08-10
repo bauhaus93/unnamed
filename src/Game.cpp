@@ -47,8 +47,7 @@ void Game::Render() {
     sdlWrapper.ClearScene();
     map.Draw(Rect{ 0, 0, 500, 500 });
     atlas.Draw(Rect{ 0, 550, 200, 200 });
-    sdlWrapper.SetDrawColor(Color { 0xFF, 0xFF, 0xFF, 0xFF });
-    sdlWrapper.DrawRect(Rect{ 0, 550, 200, 200 });
+    sdlWrapper.DrawRect(Rect{ 0, 550, 200, 200 }, Color{  0xFF, 0xFF, 0xFF, 0xFF });
     sdlWrapper.ShowScene();
 }
 

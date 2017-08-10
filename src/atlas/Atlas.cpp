@@ -7,14 +7,18 @@ Atlas::Atlas(SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
     size { CalculateSize(exactFit, maxSize) },
     sprite { sdlWrapper, size },
     root { std::make_unique<Node>(Rect{ 0, 0, size.x, size.y })} {
-    sdlWrapper.SetDrawColor(Color { 0xFF, 0xFF, 0, 0xFF });
+
     SetAsRenderTarget();
+    sdlWrapper.UseNoBlending();
+    sdlWrapper.DrawFillRect(Rect{ 0, 0, size.x, size.y }, Color{ 0xFF, 0xFF, 0xFF, 0});
+    sdlWrapper.UseAlphaBlending();
     sdlWrapper.ClearRenderTarget();
     INFO(StringFormat("Created atlas with size %d/%d, fitting elements of size %d/%d",
         size.x,
         size.y,
         exactFit.x,
         exactFit.y));
+
 }
 
 AtlasElement& Atlas::AddElement(const Size& size) {

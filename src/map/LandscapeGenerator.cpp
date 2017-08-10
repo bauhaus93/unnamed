@@ -62,11 +62,8 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
     AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
 
     atlas.SetAsRenderTarget();
-    sdlWrapper.SetDrawColor(Color{  0xA0,
-                                    0xA0,
-                                    0xA0,
-                                    0xFF });
-    sdlWrapper.DrawFillRect(element.GetRect());
+
+    sdlWrapper.DrawFillRect(element.GetRect(), Color{  0xA0, 0xA0, 0xA0, 0xFF });
     Rect spriteRect = element.GetRect();
     for (int y = 0; y < rect.h; y++) {
         for (int x = 0; x < rect.w; x++) {
@@ -87,15 +84,13 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
                                                 col,
                                                 col,
                                                 0xFF });
-                sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
+
+                sdlWrapper.DrawPoint(   Point{ spriteRect.x + x, spriteRect.y + y },
+                                        Color{  col, col, col, col });
             }
         }
     }
-    sdlWrapper.SetDrawColor(Color{  0xFF,
-                                    0xFF,
-                                    0xFF,
-                                    0xFF });
-    sdlWrapper.DrawRect(spriteRect);
+    //sdlWrapper.DrawRect(spriteRect, Color{  0xFF, 0xFF, 0xFF, 0xFF });
     sdlWrapper.ClearRenderTarget();
     return element;
 }
@@ -104,31 +99,39 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
 
 AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect) {
     AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+    Rect spriteRect = element.GetRect();
 
     atlas.SetAsRenderTarget();
-    sdlWrapper.SetDrawColor(Color{  0x50,
-                                    0x50,
-                                    0x50,
-                                    0xFF });
-    sdlWrapper.DrawFillRect(element.GetRect());
-    Rect spriteRect = element.GetRect();
-    for (int y = 0; y < rect.h; y++) {
+    sdlWrapper.DrawFillRect(spriteRect, Color{ 0xA0, 0xA0, 0xA0, 0xFF });
+    sdlWrapper.DrawRoundedFillRect(spriteRect, 15, Color{ 0x50, 0x50, 0x50, 0xFF });
+
+    /*for (int y = 0; y < rect.h; y++) {
         for (int x = 0; x < rect.w; x++) {
-            double noise = floorVariationNoise.GetOctavedNoise(rect.x + x, rect.y + y, 6, 1.4, 0.0005);
+            double noise = floorVariationNoise.GetOctavedNoise(rect.x + x, rect.y + y, 10, 1.4, 0.00005);
             noise = (1.0 + noise) / 2.0;
-            uint8_t col = 0x50 * noise;
-            sdlWrapper.SetDrawColor(Color{  col,
+            uint8_t col = 0x30;
+            if (noise < 0.1)
+                col *= 0.75;
+            else if (noise < 0.2)
+                col *= 0.80;
+            else if (noise < 0.3)
+                col *= 0.85;
+            else if (noise < 0.4)
+                col *= 0.9;
+            if (noise < 0.4) {
+                sdlWrapper.SetDrawColor(Color{  col,
                                             col,
                                             col,
                                             0xFF });
-            sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
+                                            sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
+            }
         }
     }
     sdlWrapper.SetDrawColor(Color{  0xFF,
                                     0xFF,
                                     0xFF,
-                                    0xFF });
-    sdlWrapper.DrawRect(spriteRect);
+                                    0xFF });*/
+    //sdlWrapper.DrawRect(spriteRect, Color{ 0xFF, 0xFF, 0xFF, 0xFF });
     sdlWrapper.ClearRenderTarget();
     return element;
 }

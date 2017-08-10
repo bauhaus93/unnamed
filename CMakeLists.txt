@@ -41,6 +41,8 @@ target_sources(unnamed PRIVATE ${SRCS})
 
 find_library(SDL_LIB NAMES SDL2 PATHS /usr/lib/ /usr/local/lib C:/SDL2/lib)
 find_library(SDL_MAIN_LIB NAMES SDL2main PATHS /usr/lib/ /usr/local/lib C:/SDL2/lib)
+find_library(SDL_GFX NAMES libSDL2_gfx PATHS /usr/lib/ /usr/local/lib C:/SDL2/lib)
 
 target_link_libraries(unnamed "${SDL_LIB}")
 target_link_libraries(unnamed "${SDL_MAIN_LIB}")
+target_link_libraries(unnamed "${SDL_GFX}")

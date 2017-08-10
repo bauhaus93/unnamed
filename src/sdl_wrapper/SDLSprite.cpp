@@ -12,6 +12,10 @@ SDLSprite::SDLSprite(SDLWrapper& sdlWrapper_, const Size& size):
     if (texture == nullptr) {
         throw SDLException("SDL_CreateTexture");
     }
+    if (SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND) < 0) {
+        throw SDLException("SDL_SetTextureBlendMode");
+    }
+
 }
 
 void SDLSprite::SetAsRenderTarget(){

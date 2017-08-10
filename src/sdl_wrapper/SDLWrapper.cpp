@@ -66,6 +66,7 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     }
     INFO("Created renderer");
 
+    UseAlphaBlending();
 }
 
 SDLWrapper::~SDLWrapper() {
@@ -98,6 +99,18 @@ void SDLWrapper::ClearRenderTarget(){
         throw SDLException("SDL_SetRenderTarget");
 }
 
+void SDLWrapper::UseAlphaBlending() {
+    if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND) < 0) {
+        throw SDLException("SDL_SetRenderDrawBlendMode");
+    }
+}
+
+void SDLWrapper::UseNoBlending() {
+    if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE) < 0) {
+        throw SDLException("SDL_SetRenderDrawBlendMode");
+    }
+}
+
 void SDLWrapper::SetDrawColor(const Color& color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
@@ -106,29 +119,48 @@ void SDLWrapper::SetWindowTitle(const std::string& title){
 	SDL_SetWindowTitle(window, title.c_str());
 }
 
-void SDLWrapper::DrawLine(const Point& start, const Point& stop) {
-    if (SDL_RenderDrawLine(renderer, start.x, start.y, stop.x, stop.y) < 0) {
-        throw SDLException("SDL_DrawLine");
+void SDLWrapper::DrawLine(const Point& start, const Point& stop, const Color& color) {
+    if (lineRGBA(   renderer,
+                    start.x, start.y,
+                    stop.x, stop.y,
+                    color.r, color.g, color.b, color.a) < 0) {
+        throw SDLException("lineRGBA");
     }
 }
 
-void SDLWrapper::DrawRect(const Rect& rect) {
-    SDL_Rect sdlRect { rect.x, rect.y, rect.w, rect.h };
-    if (SDL_RenderDrawRect(renderer, &sdlRect) < 0) {
-        throw SDLException("SDL_DrawRect");
+void SDLWrapper::DrawRect(const Rect& rect, const Color& color) {
+    if (rectangleRGBA(  renderer,
+                        rect.x, rect.y,
+                        rect.x + rect.w, rect.y + rect.h,
+                        color.r, color.g, color.b, color.a) < 0) {
+        throw SDLException("rectangleRGBA");
     }
 }
 
-void SDLWrapper::DrawFillRect(const Rect& rect) {
-    SDL_Rect sdlRect { rect.x, rect.y, rect.w, rect.h };
-    if (SDL_RenderFillRect(renderer, &sdlRect) < 0) {
-        throw SDLException("SDL_DrawRect");
+void SDLWrapper::DrawFillRect(const Rect& rect, const Color& color) {
+    if (boxRGBA(    renderer,
+                    rect.x, rect.y,
+                    rect.x + rect.w, rect.y + rect.h,
+                    color.r, color.g, color.b, color.a) < 0) {
+        throw SDLException("boxRGBA");
     }
 }
 
-void SDLWrapper::DrawPoint(const Point& point) {
-    if (SDL_RenderDrawPoint(renderer, point.x, point.y) < 0) {
-        throw SDLException("SDL_DrawRect");
+void SDLWrapper::DrawRoundedFillRect(const Rect& rect, int radius, const Color& color) {
+    if (roundedBoxRGBA(     renderer,
+                            rect.x, rect.y,
+                            rect.x + rect.w, rect.y + rect.h,
+                            radius,
+                            color.r, color.g, color.b, color.a) < 0) {
+        throw SDLException("roundedBoxRGBA");
+    }
+}
+
+void SDLWrapper::DrawPoint(const Point& point, const Color& color) {
+    if (pixelRGBA(  renderer,
+                    point.x, point.y,
+                    color.r, color.g, color.b, color.a) < 0) {
+        throw SDLException("pixelRGBA");
     }
 }
 

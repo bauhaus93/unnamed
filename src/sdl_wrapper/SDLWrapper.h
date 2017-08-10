@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #endif
 
+#include <SDL2/SDL2_gfxPrimitives.h>
+
 #include <string>
 #include <memory>
 
@@ -42,10 +44,14 @@ public:
         void                    SetDrawColor(const Color& color);
         void                    SetWindowTitle(const std::string& title);
         void                    ClearRenderTarget();
-        void                    DrawLine(const Point& start, const Point& stop);
-        void                    DrawRect(const Rect& rect);
-        void                    DrawFillRect(const Rect& rect);
-        void                    DrawPoint(const Point& point);
+        void                    UseAlphaBlending();
+        void                    UseNoBlending();
+
+        void                    DrawLine(const Point& start, const Point& stop, const Color& color);
+        void                    DrawRect(const Rect& rect, const Color& color);
+        void                    DrawFillRect(const Rect& rect, const Color& color);
+        void                    DrawRoundedFillRect(const Rect& rect, int radius, const Color& color);
+        void                    DrawPoint(const Point& point, const Color& color);
 
 
         void                    StartTimers();
