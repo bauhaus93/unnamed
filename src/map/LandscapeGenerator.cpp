@@ -1,12 +1,13 @@
 #include "LandscapeGenerator.h"
 
+int distance(const Point& a, const Point& b);
 
 LandscapeGenerator::LandscapeGenerator(SDLWrapper& sdlWrapper_, Atlas& atlas_, unsigned int seed):
     sdlWrapper { sdlWrapper_ },
     atlas { atlas_ },
     rng { seed },
     floorVariationNoise { rng.Random() },
-    terrainTypeNoise { rng.Random() } {
+    rockNoise { rng.Random() } {
 }
 
 Tile* LandscapeGenerator::Generate(const Rect& fieldRect) {
@@ -49,9 +50,10 @@ Tile* LandscapeGenerator::Generate(const Rect& fieldRect) {
 Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
     AtlasElement& element = CreateFloorSprite(tileRect);
     Tile* tile = new Tile(Point{ tileRect.x, tileRect.y }, element);
+    uint8_t rockMask = GetNeighbourRockMask(tileRect);
 
     if (HasRock(tileRect)) {
-        std::unique_ptr<Rock> rock = std::make_unique<Rock>(CreateRockSprite(tileRect));
+        std::unique_ptr<Rock> rock = std::make_unique<Rock>(CreateRockSprite(tileRect, rockMask));
         tile->AddRock(std::move(rock));
     }
 
@@ -97,19 +99,56 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
 
 
 
-AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect) {
+
+AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
     AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
     Rect spriteRect = element.GetRect();
+    const int CORNER_RADIUS = 14;
 
     atlas.SetAsRenderTarget();
-    sdlWrapper.DrawFillRect(spriteRect, Color{ 0xA0, 0xA0, 0xA0, 0xFF });
-    sdlWrapper.DrawRoundedFillRect(spriteRect, 15, Color{ 0x50, 0x50, 0x50, 0xFF });
 
+
+
+    if (rockMask == (1 | 2 | 4 | 8)) {
+        sdlWrapper.DrawFillRect(spriteRect, Color{ 0x50, 0x50, 0x50, 0xFF });
+    }
+    else {
+        sdlWrapper.DrawFillRect(spriteRect, Color{ 0xA0, 0xA0, 0xA0, 0xFF });
+        sdlWrapper.DrawRoundedFillRect(spriteRect, CORNER_RADIUS, Color{ 0x50, 0x50, 0x50, 0xFF });
+        if ((rockMask & (1 | 2))) {
+            Rect r { spriteRect.x + spriteRect.w - CORNER_RADIUS,
+                     spriteRect.y,
+                     CORNER_RADIUS,
+                     CORNER_RADIUS };
+            sdlWrapper.DrawFillRect(r, Color{ 0x50, 0x50, 0x50, 0xFF });
+        }
+        if ((rockMask & (2 | 4))) {
+            Rect r { spriteRect.x + spriteRect.w - CORNER_RADIUS,
+                     spriteRect.y + spriteRect.h - CORNER_RADIUS,
+                     CORNER_RADIUS,
+                     CORNER_RADIUS };
+            sdlWrapper.DrawFillRect(r, Color{ 0x50, 0x50, 0x50, 0xFF });
+        }
+        if ((rockMask & (4 | 8))) {
+            Rect r { spriteRect.x,
+                     spriteRect.y + spriteRect.h - CORNER_RADIUS,
+                     CORNER_RADIUS,
+                     CORNER_RADIUS };
+            sdlWrapper.DrawFillRect(r, Color{ 0x50, 0x50, 0x50, 0xFF });
+        }
+        if ((rockMask & (8 | 1))) {
+            Rect r { spriteRect.x,
+                     spriteRect.y,
+                     CORNER_RADIUS,
+                     CORNER_RADIUS };
+            sdlWrapper.DrawFillRect(r, Color{ 0x50, 0x50, 0x50, 0xFF });
+        }
+    }
     /*for (int y = 0; y < rect.h; y++) {
         for (int x = 0; x < rect.w; x++) {
-            double noise = floorVariationNoise.GetOctavedNoise(rect.x + x, rect.y + y, 10, 1.4, 0.00005);
+            double noise = floorVariationNoise.GetOctavedNoise(rect.x + x, rect.y + y, 4, 1.2, 0.002);
             noise = (1.0 + noise) / 2.0;
-            uint8_t col = 0x30;
+            uint8_t col = 0x50;
             if (noise < 0.1)
                 col *= 0.75;
             else if (noise < 0.2)
@@ -119,41 +158,60 @@ AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect) {
             else if (noise < 0.4)
                 col *= 0.9;
             if (noise < 0.4) {
-                sdlWrapper.SetDrawColor(Color{  col,
-                                            col,
-                                            col,
-                                            0xFF });
-                                            sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y });
+                Point pos { spriteRect.x + x, spriteRect.y + y };
+
+                if (distance(pos, Point{ spriteRect.x + spriteRect.w / 2, spriteRect.y + spriteRect.h / 2 }) <= TILE_SIZE / 2)
+                    sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
+                else {
+                    int distNE = distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
+                    int distSE = distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
+                    int distSW = distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
+                    int distNW = distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
+
+                    if (distNE <= CORNER_RADIUS || ((rockMask & (1 | 2)) && distNE <= 19))
+                        sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
+                    else if (distSE <= CORNER_RADIUS || ((rockMask & (2 | 4)) && distSE <= 19))
+                        sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
+                    else if (distSW <= CORNER_RADIUS || ((rockMask & (4 | 8)) && distSW <= 19))
+                        sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
+                    else if (distNW <= CORNER_RADIUS || ((rockMask & (8 | 1)) && distNW <= 19))
+                        sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
+                }
             }
         }
-    }
-    sdlWrapper.SetDrawColor(Color{  0xFF,
-                                    0xFF,
-                                    0xFF,
-                                    0xFF });*/
+    }*/
+
     //sdlWrapper.DrawRect(spriteRect, Color{ 0xFF, 0xFF, 0xFF, 0xFF });
     sdlWrapper.ClearRenderTarget();
     return element;
 }
 
 bool LandscapeGenerator::HasRock(const Rect& tileRect) {
-    return (1 + terrainTypeNoise.GetOctavedNoise(tileRect.x / tileRect.w, tileRect.y / tileRect.h, 2, 5.0, 0.025)) / 2 < 0.33;
+    return (1 + rockNoise.GetOctavedNoise(tileRect.x / tileRect.w, tileRect.y / tileRect.h, 2, 5.0, 0.025)) / 2 < 0.33;
 }
 
 uint8_t LandscapeGenerator::GetNeighbourRockMask(const Rect& tileRect) {
     uint8_t mask = 0;
 
-    if (HasRock(Rect{ tileRect.x, tileRect.y - 1, tileRect.w, tileRect.h })) {
+    if (HasRock(Rect{ tileRect.x, tileRect.y - TILE_SIZE, tileRect.w, tileRect.h })) {
         mask |= 1;
     }
-    if (HasRock(Rect{ tileRect.x + 1, tileRect.y, tileRect.w, tileRect.h })) {
+    if (HasRock(Rect{ tileRect.x + TILE_SIZE, tileRect.y, tileRect.w, tileRect.h })) {
         mask |= 2;
     }
-    if (HasRock(Rect{ tileRect.x, tileRect.y + 1, tileRect.w, tileRect.h })) {
+    if (HasRock(Rect{ tileRect.x, tileRect.y + TILE_SIZE, tileRect.w, tileRect.h })) {
         mask |= 4;
     }
-    if (HasRock(Rect{ tileRect.x - 1, tileRect.y, tileRect.w, tileRect.h })) {
+    if (HasRock(Rect{ tileRect.x - TILE_SIZE, tileRect.y, tileRect.w, tileRect.h })) {
         mask |= 8;
     }
     return mask;
+}
+
+int distance(const Point& a, const Point& b) {
+    int diffX = a.x - b.x;
+    int diffY = a.y - b.y;
+    diffX *= diffX;
+    diffY *= diffY;
+    return sqrt(diffX + diffY);
 }
