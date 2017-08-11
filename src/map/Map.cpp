@@ -50,6 +50,7 @@ void Map::Draw(const Rect& destRect) {
             nextRow = currRow->GetNeighbour(Direction::SOUTH);
         }
     }
+
 }
 
 void Map::MoveCamera(Direction dir) {
@@ -57,6 +58,28 @@ void Map::MoveCamera(Direction dir) {
     if (nb != nullptr) {
         camera = nb;
     }
+}
+
+Point Map::GetCameraPos() {
+    return camera->GetPos();
+}
+
+Tile* Map::GetRandomTraversableTile(rng::Rng& rng) {
+    Tile* t = nullptr;
+
+    do {
+        t = root;
+        int x = rng.Random(0, size.x);
+        int y = rng.Random(0, size.y);
+
+        while (--x > 0) {
+            t = t->GetNeighbour(Direction::EAST);
+        }
+        while (--y > 0) {
+            t = t->GetNeighbour(Direction::SOUTH);
+        }
+    } while (!t->IsTraversable());
+    return t;
 }
 
 }

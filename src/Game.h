@@ -10,6 +10,8 @@
 #include "atlas/NoAtlasSpaceException.h"
 #include "map/Map.h"
 #include "map/generator/LandscapeGenerator.h"
+#include "unit/UnitManager.h"
+#include "map/pathfinding/FindPath.h"
 
 namespace unnamed {
 
@@ -20,11 +22,13 @@ class Game {
     atlas::Atlas                        atlas;
     map::LandscapeGenerator             landscapeGenerator;
     map::Map                            map;
+    unit::UnitManager                   unitManager;
 
 
     void            Render();
     void            Update();
     void            HandleKeyDown(event::EventKeyDown& event);
+    void            HandleUnits();
 
 public:
 

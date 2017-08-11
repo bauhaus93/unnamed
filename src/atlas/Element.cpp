@@ -7,6 +7,10 @@ Element::Element(const Rect& rect_, sdl::Sprite& atlasSprite_):
     atlasSprite { atlasSprite_ } {
 }
 
+void Element::SetAsRenderTarget() {
+    atlasSprite.SetAsRenderTarget();
+}
+
 void Element::Draw(const Point& pos) const {
     atlasSprite.Draw(rect, Rect{ pos.x, pos.y, rect.w, rect.h });
 }

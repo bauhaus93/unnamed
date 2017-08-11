@@ -52,6 +52,7 @@ public:
         void                    DrawFillRect(const Rect& rect, const Color& color);
         void                    DrawRoundedFillRect(const Rect& rect, int radius, const Color& color);
         void                    DrawPoint(const Point& point, const Color& color);
+        void                    DrawFilledCircle(const Point& origin, int radius, const Color& color);
 
 
         void                    StartTimers();

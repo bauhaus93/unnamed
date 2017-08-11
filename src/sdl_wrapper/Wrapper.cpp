@@ -166,6 +166,15 @@ void Wrapper::DrawPoint(const Point& point, const Color& color) {
     }
 }
 
+void Wrapper::DrawFilledCircle(const Point& origin, int radius, const Color& color) {
+    if (filledCircleRGBA(   renderer,
+                            origin.x, origin.y,
+                            radius,
+                            color.r, color.g, color.b, color.a)) {
+        throw SDLException("filledCircleRGBA");
+    }
+}
+
 void Wrapper::StartTimers() {
 
     eventTypeUpdate = SDL_RegisterEvents(2);

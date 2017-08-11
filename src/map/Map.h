@@ -25,6 +25,8 @@ public:
                         ~Map();
     void                Draw(const Rect& destRect);
     void                MoveCamera(Direction dir);
+    Point               GetCameraPos();
+    Tile*               GetRandomTraversableTile(rng::Rng& rng);
 
 };
 

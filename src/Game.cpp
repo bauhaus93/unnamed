@@ -7,7 +7,9 @@ Game::Game(const Size& windowSize):
     rng {},
     atlas { sdlWrapper, Size{ 50, 50 }, Size{ 4000, 4000 } },
     landscapeGenerator { sdlWrapper, atlas, rng.Random() },
-    map { Size{ 40, 40 }, landscapeGenerator } {
+    map { Size{ 40, 40 }, landscapeGenerator },
+    unitManager { atlas, sdlWrapper } {
+
 
     INFO(StringFormat("Game seed: %u", rng.GetSeed()));
 }
@@ -43,10 +45,13 @@ void Game::Loop() {
 }
 
 void Game::Render() {
+    const Rect mapRect{ 0, 0, 1024, 768 };
 
     sdlWrapper.SetDrawColor(Color { 0, 0, 0, 0xFF });
     sdlWrapper.ClearScene();
-    map.Draw(Rect{ 0, 0, 1024, 768 });
+
+    map.Draw(mapRect);
+    unitManager.DrawUnits(mapRect, map.GetCameraPos());
 
     sdlWrapper.DrawFillRect(Rect{ 1024 - 210, 10, 200, 200 }, Color{  0, 0, 0, 0xFF });
     atlas.Draw(Rect{ 1024 - 210, 10, 200, 200 });
@@ -56,6 +61,7 @@ void Game::Render() {
 }
 
 void Game::Update() {
+    HandleUnits();
 }
 
 void Game::HandleKeyDown(event::EventKeyDown& event) {
@@ -66,6 +72,27 @@ void Game::HandleKeyDown(event::EventKeyDown& event) {
     case event::Key::RIGHT:    map.MoveCamera(map::Direction::EAST);    break;
     default:                   INFO("Unhandled key pressed");           break;
     }
+}
+
+void Game::HandleUnits() {
+
+    while (unitManager.GetUnitCount() < 10) {
+        unitManager.CreateTestUnit(map.GetRandomTraversableTile(rng));
+    }
+
+    unitManager.ResetIteration();
+    while (unitManager.HasNextUnit()) {
+        unit::Unit& unit = unitManager.GetNextUnit();
+        if (!unit.HasDestination()) {
+            std::unique_ptr<map::Path> path = map::FindPath(unit.GetTile(), map.GetRandomTraversableTile(rng));
+            if (path != nullptr)
+                unit.SetDestination(std::move(path));
+        }
+        else {
+            unit.WalkDestination();
+        }
+    }
+
 }
 
 }

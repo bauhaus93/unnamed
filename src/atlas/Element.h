@@ -15,6 +15,8 @@ public:
 
                     Element(const Rect& rect, sdl::Sprite& atlasSprite_);
 
+    void            SetAsRenderTarget();
+
     void            Draw(const Point& pos) const;
     Rect            GetRect() const;
     void            MarkRed();
