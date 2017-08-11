@@ -2,7 +2,7 @@
 
 namespace unnamed::atlas {
 
-Element::Element(const Rect& rect_, sdl::SDLSprite& atlasSprite_):
+Element::Element(const Rect& rect_, sdl::Sprite& atlasSprite_):
     rect { rect_ },
     atlasSprite { atlasSprite_ } {
 }

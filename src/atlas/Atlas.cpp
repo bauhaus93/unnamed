@@ -4,7 +4,7 @@ namespace unnamed::atlas {
 
 static Size CalculateSize(const Size& exactFit, const Size& maxSize);
 
-Atlas::Atlas(sdl::SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
+Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
     size { CalculateSize(exactFit, maxSize) },
     sprite { sdlWrapper, size },
     root { std::make_unique<Node>(Rect{ 0, 0, size.x, size.y })} {

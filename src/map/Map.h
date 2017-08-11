@@ -1,7 +1,7 @@
 #pragma once
 
 #include "atlas/Atlas.h"
-#include "sdl_wrapper/SDLWrapper.h"
+#include "sdl_wrapper/Wrapper.h"
 #include "logger/StdLogger.h"
 #include "common/Point.h"
 #include "common/Rect.h"

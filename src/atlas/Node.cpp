@@ -71,7 +71,7 @@ void Node::RecalculateSubSpace() {
     subSpace = maxSize;
 }
 
-Element& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
+Element& Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
     DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
     if (FitsInSubTree(size)) {

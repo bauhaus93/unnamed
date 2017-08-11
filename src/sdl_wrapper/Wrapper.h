@@ -25,7 +25,7 @@
 
 namespace unnamed::sdl {
 
-class SDLWrapper {
+class Wrapper {
 
     SDL_Window*     window;
     SDL_Renderer*   renderer;
@@ -36,8 +36,8 @@ class SDLWrapper {
 
 public:
 
-                                SDLWrapper(const std::string& windowTitle, const Size& windowSize);
-                                ~SDLWrapper();
+                                Wrapper(const std::string& windowTitle, const Size& windowSize);
+                                ~Wrapper();
 
         void                    ClearScene();
         void                    ShowScene();

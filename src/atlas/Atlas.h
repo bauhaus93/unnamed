@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "sdl_wrapper/SDLWrapper.h"
-#include "sdl_wrapper/SDLSprite.h"
+#include "sdl_wrapper/Wrapper.h"
+#include "sdl_wrapper/Sprite.h"
 #include "common/Size.h"
 #include "common/Rect.h"
 #include "common/Point.h"
@@ -16,14 +16,14 @@ namespace unnamed::atlas {
 class Atlas {
 
     Size                    size;
-    sdl::SDLSprite          sprite;
+    sdl::Sprite             sprite;
     std::unique_ptr<Node>   root;
 
 
 
 public:
 
-                            Atlas(sdl::SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
+                            Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
         Element&            AddElement(const Size& size);
         void                Draw(const Rect& rect) const;
         void                SetAsRenderTarget();

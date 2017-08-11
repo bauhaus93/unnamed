@@ -1,8 +1,8 @@
-#include "SDLSprite.h"
+#include "Sprite.h"
 
 namespace unnamed::sdl {
 
-SDLSprite::SDLSprite(SDLWrapper& sdlWrapper_, const Size& size):
+Sprite::Sprite(Wrapper& sdlWrapper_, const Size& size):
     sdlWrapper { sdlWrapper_ },
     texture { nullptr } {
 
@@ -20,12 +20,12 @@ SDLSprite::SDLSprite(SDLWrapper& sdlWrapper_, const Size& size):
 
 }
 
-void SDLSprite::SetAsRenderTarget(){
+void Sprite::SetAsRenderTarget(){
 	if (SDL_SetRenderTarget(sdlWrapper.GetRenderer(), texture) == -1)
 		throw SDLException("SDL_SetRenderTarget");
 }
 
-void SDLSprite::Draw(const Rect& srcRect, const Rect& destRect) const {
+void Sprite::Draw(const Rect& srcRect, const Rect& destRect) const {
     SDL_Rect src { srcRect.x, srcRect.y, srcRect.w, srcRect.h };
     SDL_Rect dest { destRect.x, destRect.y, destRect.w, destRect.h };
 
@@ -33,7 +33,7 @@ void SDLSprite::Draw(const Rect& srcRect, const Rect& destRect) const {
 		throw SDLException("SDL_RenderCopy");
 }
 
-void SDLSprite::MarkRed(const Rect& rect) {
+void Sprite::MarkRed(const Rect& rect) {
     SetAsRenderTarget();
     sdlWrapper.DrawRect(rect, Color{ 0xFF, 0, 0, 0xFF });
     sdlWrapper.ClearRenderTarget();

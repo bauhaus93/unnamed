@@ -1,11 +1,11 @@
-#include "SDLWrapper.h"
+#include "Wrapper.h"
 
 namespace unnamed::sdl {
 
 static Uint32 RenderCallback(Uint32 delay, void* params);
 static Uint32 UpdateCallback(Uint32 delay, void* params);
 
-SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
+Wrapper::Wrapper(const std::string& windowTitle, const Size& windowSize):
     window { nullptr },
     renderer { nullptr },
     timerRender { 0 },
@@ -71,7 +71,7 @@ SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     UseAlphaBlending();
 }
 
-SDLWrapper::~SDLWrapper() {
+Wrapper::~Wrapper() {
 
     StopTimers();
 
@@ -88,40 +88,40 @@ SDLWrapper::~SDLWrapper() {
     INFO("SDL quit");
 }
 
-void SDLWrapper::ClearScene() {
+void Wrapper::ClearScene() {
     SDL_RenderClear(renderer);
 }
 
-void SDLWrapper::ShowScene() {
+void Wrapper::ShowScene() {
     SDL_RenderPresent(renderer);
 }
 
-void SDLWrapper::ClearRenderTarget(){
+void Wrapper::ClearRenderTarget(){
     if (SDL_SetRenderTarget(renderer, nullptr) == -1)
         throw SDLException("SDL_SetRenderTarget");
 }
 
-void SDLWrapper::UseAlphaBlending() {
+void Wrapper::UseAlphaBlending() {
     if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND) < 0) {
         throw SDLException("SDL_SetRenderDrawBlendMode");
     }
 }
 
-void SDLWrapper::UseNoBlending() {
+void Wrapper::UseNoBlending() {
     if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE) < 0) {
         throw SDLException("SDL_SetRenderDrawBlendMode");
     }
 }
 
-void SDLWrapper::SetDrawColor(const Color& color) {
+void Wrapper::SetDrawColor(const Color& color) {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
 
-void SDLWrapper::SetWindowTitle(const std::string& title){
+void Wrapper::SetWindowTitle(const std::string& title){
 	SDL_SetWindowTitle(window, title.c_str());
 }
 
-void SDLWrapper::DrawLine(const Point& start, const Point& stop, const Color& color) {
+void Wrapper::DrawLine(const Point& start, const Point& stop, const Color& color) {
     if (lineRGBA(   renderer,
                     start.x, start.y,
                     stop.x, stop.y,
@@ -130,7 +130,7 @@ void SDLWrapper::DrawLine(const Point& start, const Point& stop, const Color& co
     }
 }
 
-void SDLWrapper::DrawRect(const Rect& rect, const Color& color) {
+void Wrapper::DrawRect(const Rect& rect, const Color& color) {
     if (rectangleRGBA(  renderer,
                         rect.x, rect.y,
                         rect.x + rect.w, rect.y + rect.h,
@@ -139,7 +139,7 @@ void SDLWrapper::DrawRect(const Rect& rect, const Color& color) {
     }
 }
 
-void SDLWrapper::DrawFillRect(const Rect& rect, const Color& color) {
+void Wrapper::DrawFillRect(const Rect& rect, const Color& color) {
     if (boxRGBA(    renderer,
                     rect.x, rect.y,
                     rect.x + rect.w, rect.y + rect.h,
@@ -148,7 +148,7 @@ void SDLWrapper::DrawFillRect(const Rect& rect, const Color& color) {
     }
 }
 
-void SDLWrapper::DrawRoundedFillRect(const Rect& rect, int radius, const Color& color) {
+void Wrapper::DrawRoundedFillRect(const Rect& rect, int radius, const Color& color) {
     if (roundedBoxRGBA(     renderer,
                             rect.x, rect.y,
                             rect.x + rect.w, rect.y + rect.h,
@@ -158,7 +158,7 @@ void SDLWrapper::DrawRoundedFillRect(const Rect& rect, int radius, const Color& 
     }
 }
 
-void SDLWrapper::DrawPoint(const Point& point, const Color& color) {
+void Wrapper::DrawPoint(const Point& point, const Color& color) {
     if (pixelRGBA(  renderer,
                     point.x, point.y,
                     color.r, color.g, color.b, color.a) < 0) {
@@ -166,7 +166,7 @@ void SDLWrapper::DrawPoint(const Point& point, const Color& color) {
     }
 }
 
-void SDLWrapper::StartTimers() {
+void Wrapper::StartTimers() {
 
     eventTypeUpdate = SDL_RegisterEvents(2);
     if (eventTypeUpdate == (Uint32)-1) {
@@ -191,7 +191,7 @@ void SDLWrapper::StartTimers() {
     INFO("Started render timer");
 }
 
-void SDLWrapper::StopTimers() {
+void Wrapper::StopTimers() {
     if (timerRender != 0) {
         SDL_RemoveTimer(timerRender);
         timerRender = 0;
@@ -205,7 +205,7 @@ void SDLWrapper::StopTimers() {
     }
 }
 
-std::unique_ptr<event::Event> SDLWrapper::WaitEvent() {
+std::unique_ptr<event::Event> Wrapper::WaitEvent() {
     SDL_Event sdlEvent;
     std::unique_ptr<event::Event> event = nullptr;
 
@@ -243,7 +243,7 @@ std::unique_ptr<event::Event> SDLWrapper::WaitEvent() {
     return event;
 }
 
-SDL_Renderer* SDLWrapper::GetRenderer() const {
+SDL_Renderer* Wrapper::GetRenderer() const {
     return renderer;
 }
 

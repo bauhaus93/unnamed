@@ -30,7 +30,7 @@ public:
     Size                        GetSubSpace() const;
     void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
-    Element&                    AddElement(const Size& size, sdl::SDLSprite& atlasSprite);
+    Element&                    AddElement(const Size& size, sdl::Sprite& atlasSprite);
 
 };
 

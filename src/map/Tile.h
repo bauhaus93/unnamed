@@ -8,7 +8,7 @@
 #include "common/StringFormat.h"
 #include "atlas/Atlas.h"
 #include "atlas/Element.h"
-#include "sdl_wrapper/SDLWrapper.h"
+#include "sdl_wrapper/Wrapper.h"
 #include "logger/StdLogger.h"
 #include "Rock.h"
 

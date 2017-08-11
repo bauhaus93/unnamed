@@ -4,7 +4,7 @@ namespace unnamed::map {
 
 int distance(const Point& a, const Point& b);
 
-LandscapeGenerator::LandscapeGenerator(sdl::SDLWrapper& sdlWrapper_, atlas::Atlas& atlas_, unsigned int seed):
+LandscapeGenerator::LandscapeGenerator(sdl::Wrapper& sdlWrapper_, atlas::Atlas& atlas_, unsigned int seed):
     sdlWrapper { sdlWrapper_ },
     atlas { atlas_ },
     rng { seed },

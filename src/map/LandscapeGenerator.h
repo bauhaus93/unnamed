@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "sdl_wrapper/SDLWrapper.h"
+#include "sdl_wrapper/Wrapper.h"
 #include "common/Rect.h"
 #include "atlas/Atlas.h"
 #include "SimplexNoise.h"
@@ -12,7 +12,7 @@ namespace unnamed::map {
 
 class LandscapeGenerator {
 
-    sdl::SDLWrapper&        sdlWrapper;
+    sdl::Wrapper&           sdlWrapper;
     atlas::Atlas&           atlas;
     rng::Rng                rng;
     SimplexNoise            floorVariationNoise;
@@ -25,7 +25,7 @@ class LandscapeGenerator {
     uint8_t                 GetNeighbourRockMask(const Rect& tileRect);
 
 public:
-                            LandscapeGenerator(sdl::SDLWrapper& sdlWrapper_, atlas::Atlas& atlas, unsigned int seed);
+                            LandscapeGenerator(sdl::Wrapper& sdlWrapper_, atlas::Atlas& atlas, unsigned int seed);
     Tile*                   Generate(const Rect& fieldRect);
 
 };

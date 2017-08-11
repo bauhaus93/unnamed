@@ -1,5 +1,5 @@
 add_sources(
-  SDLWrapper.cpp
+  Wrapper.cpp
+  Sprite.cpp
   SDLException.cpp
-  SDLSprite.cpp
 )

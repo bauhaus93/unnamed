@@ -7,22 +7,22 @@
 #include <SDL2/SDL.h>
 #endif
 
-#include "SDLWrapper.h"
+#include "Wrapper.h"
 #include "SDLException.h"
 #include "common/Rect.h"
 #include "common/Size.h"
 
 namespace unnamed::sdl {
 
-class SDLSprite {
+class Sprite {
 
-    SDLWrapper&         sdlWrapper;
+    Wrapper&            sdlWrapper;
     SDL_Texture*        texture;
 
 
 public:
 
-                        SDLSprite(SDLWrapper& sdlWrapper_, const Size& size);
+                        Sprite(Wrapper& sdlWrapper_, const Size& size);
 
 
     void                SetAsRenderTarget();

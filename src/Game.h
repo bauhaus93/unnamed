@@ -3,7 +3,7 @@
 #include "logger/StdLogger.h"
 #include "event/Event.h"
 #include "event/EventKeyDown.h"
-#include "sdl_wrapper/SDLWrapper.h"
+#include "sdl_wrapper/Wrapper.h"
 #include "common/Size.h"
 #include "common/Rng.h"
 #include "atlas/Atlas.h"
@@ -15,7 +15,7 @@ namespace unnamed {
 
 class Game {
 
-    sdl::SDLWrapper             sdlWrapper;
+    sdl::Wrapper                sdlWrapper;
     rng::Rng                    rng;
     atlas::Atlas                atlas;
     map::LandscapeGenerator     landscapeGenerator;
