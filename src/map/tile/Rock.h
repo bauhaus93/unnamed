@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "common/Rect.h"
 #include "common/Point.h"
 #include "atlas/Element.h"
@@ -8,12 +10,12 @@ namespace unnamed::map {
 
 class Rock {
 
-    atlas::Element&    sprite;
+    std::shared_ptr<atlas::Element>    sprite;
 
 public:
-    explicit                Rock(atlas::Element& sprite_);
+    explicit                            Rock(std::shared_ptr<atlas::Element> sprite_);
 
-    atlas::Element&      GetSprite() const;
+    std::shared_ptr<atlas::Element>&    GetSprite();
 
 };
 

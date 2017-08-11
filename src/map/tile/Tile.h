@@ -25,14 +25,14 @@ enum class Direction {
 
 class Tile {
 
-    Rect                    rect;
-    Tile*                   neighbour[4];
-    atlas::Element&         sprite;
-    std::unique_ptr<Rock>   rock;
+    Rect                            rect;
+    Tile*                           neighbour[4];
+    std::shared_ptr<atlas::Element> sprite;
+    std::unique_ptr<Rock>           rock;
 
 public:
 
-                        Tile(const Point& pos, atlas::Element& sprite_);
+                        Tile(const Point& pos, std::shared_ptr<atlas::Element>& sprite_);
         void            SetNeighbour(Direction dir, Tile* tile);
 
         Tile*           GetNeighbour(Direction dir) const;

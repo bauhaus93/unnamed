@@ -71,14 +71,14 @@ void Node::RecalculateSubSpace() {
     subSpace = maxSize;
 }
 
-Element& Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
+std::shared_ptr<Element> Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
     DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
     if (FitsInSubTree(size)) {
         if (!HasSubTree()) {
             ExpandTree();
             DEBUG("Expanded tree");
-            Element& element = subTree[0]->AddElement(size, atlasSprite);
+            auto element = subTree[0]->AddElement(size, atlasSprite);
             RecalculateSubSpace();
             return element;
         }
@@ -87,7 +87,7 @@ Element& Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
                 Size maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
                 if (size.x <= maxSize.x && size.y <= maxSize.y) {
-                    Element& element = subTree[i]->AddElement(size, atlasSprite);
+                    std::shared_ptr<Element> element = subTree[i]->AddElement(size, atlasSprite);
                     RecalculateSubSpace();
                     return element;
                 }
@@ -95,7 +95,7 @@ Element& Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
         }
     }
     else if (FitsInMe(size) && IsLeaf()){
-        element = std::make_unique<Element>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
+        element = std::make_shared<Element>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
         DEBUG(StringFormat("New atlas element (%d, %d, %d, %d) in %d/%d",   rect.x,
                                                                             rect.y,
                                                                             size.x,
@@ -103,7 +103,7 @@ Element& Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
                                                                             rect.w,
                                                                             rect.h));
         subSpace = Size{ 0, 0 };
-        return *element;
+        return element;
     }
     throw NoAtlasSpaceException(size);
 }

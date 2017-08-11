@@ -2,7 +2,7 @@
 
 namespace unnamed::map {
 
-Tile::Tile(const Point& pos, atlas::Element& sprite_):
+Tile::Tile(const Point& pos, std::shared_ptr<atlas::Element>& sprite_):
     rect { pos.x, pos.y, TILE_SIZE, TILE_SIZE },
     neighbour { nullptr, nullptr, nullptr, nullptr },
     sprite { sprite_ },
@@ -39,9 +39,9 @@ Point Tile::GetPos() const {
 
 void Tile::Draw(const Point& camera, const Point& offset) {
     if (HasRock())
-        rock->GetSprite().Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
+        rock->GetSprite()->Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
     else
-        sprite.Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
+        sprite->Draw(Point{ offset.x + rect.x - camera.x, offset.y + rect.y - camera.y });
 }
 
 void Tile::AddRock(std::unique_ptr<Rock> rock_) {
@@ -60,7 +60,7 @@ bool Tile::IsTraversable() const {
 }
 
 void Tile::MarkRed() {
-    sprite.MarkRed();
+    sprite->MarkRed();
 }
 
 void LinkRows(Tile* topRow, Tile* botRow) {

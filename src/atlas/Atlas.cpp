@@ -22,7 +22,7 @@ Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize
 
 }
 
-Element& Atlas::AddElement(const Size& size) {
+std::shared_ptr<Element> Atlas::AddElement(const Size& size) {
     return root->AddElement(size, sprite);
 }
 

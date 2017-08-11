@@ -18,11 +18,11 @@ class LandscapeGenerator {
     SimplexNoise            floorVariationNoise;
     SimplexNoise            rockNoise;
 
-    Tile*                   CreateTile(const Rect& tileRect);
-    atlas::Element&         CreateFloorSprite(const Rect& tileRect);
-    atlas::Element&         CreateRockSprite(const Rect& rect, uint8_t rockMask);
-    bool                    HasRock(const Rect& tileRect);
-    uint8_t                 GetNeighbourRockMask(const Rect& tileRect);
+    Tile*                           CreateTile(const Rect& tileRect);
+    std::shared_ptr<atlas::Element> CreateFloorSprite(const Rect& tileRect);
+    std::shared_ptr<atlas::Element> CreateRockSprite(const Rect& rect, uint8_t rockMask);
+    bool                            HasRock(const Rect& tileRect);
+    uint8_t                         GetNeighbourRockMask(const Rect& tileRect);
 
 public:
                             LandscapeGenerator(sdl::Wrapper& sdlWrapper_, atlas::Atlas& atlas, unsigned int seed);

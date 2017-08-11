@@ -15,7 +15,7 @@ namespace unnamed::atlas {
 class Node {
 
     std::unique_ptr<Node>           subTree[4];
-    std::unique_ptr<Element>        element;
+    std::shared_ptr<Element>        element;
     Rect                            rect;
     Size                            subSpace;
 
@@ -30,7 +30,7 @@ public:
     Size                        GetSubSpace() const;
     void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
-    Element&                    AddElement(const Size& size, sdl::Sprite& atlasSprite);
+    std::shared_ptr<Element>    AddElement(const Size& size, sdl::Sprite& atlasSprite);
 
 };
 
