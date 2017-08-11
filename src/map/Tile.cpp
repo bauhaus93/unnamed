@@ -55,6 +55,14 @@ bool Tile::HasRock() const {
     return rock != nullptr;
 }
 
+bool Tile::IsTraversable() const {
+    return !HasRock();
+}
+
+void Tile::MarkRed() {
+    sprite.MarkRed();
+}
+
 void LinkRows(Tile* topRow, Tile* botRow) {
     if (topRow == nullptr || botRow == nullptr)
         return;

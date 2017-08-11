@@ -1,31 +1,35 @@
 #include "FindPath.h"
 
 int DistanceHeuristic(Tile* curr, Tile* dest);
-std::vector<PathNode*> ReconstructPath(PathNode* dest);
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list);
 
-void FindPath(Tile* src, Tile* dest) {
-    std::priority_queue<PathNode*> openSet;
+std::unique_ptr<Path> FindPath(Tile* src, Tile* dest) {
+    std::vector<PathNode*> openSet;
     std::vector<PathNode*> closedSet;
 
-    openSet.push(new PathNode(src, nullptr, 0, DistanceHeuristic(src, dest)));
+    openSet.push_back(new PathNode(src, nullptr, 0, DistanceHeuristic(src, dest)));
 
     while (!openSet.empty()) {
-        PathNode* currNode = openSet.top();
-        INFO(StringFormat("top node g() = %d, f() = %d", currNode->GetGScore(), currNode->GetFScore()));
+        std::pop_heap(openSet.begin(), openSet.end(), PathOrder);
+        PathNode* currNode = openSet.back();
+        openSet.pop_back();
 
-        openSet.pop();
+        //INFO(StringFormat("curr @ %d/%d", currNode->GetTile()->GetPos().x, currNode->GetTile()->GetPos().y));
+
         closedSet.push_back(currNode);
+        //std::push_heap(closedSet.begin(), closedSet.end(), PathOrder);
 
         if (currNode->GetTile() == dest) {
-            INFO(StringFormat("found path!"));
-            auto path = ReconstructPath(currNode);
-            while(!path.empty()) {
-                INFO(StringFormat("path: (%d/%d)", path.back()->GetTile()->GetPos()));
-                delete path.back();
-                path.pop_back();
+            std::unique_ptr<Path> path = std::make_unique<Path>(currNode);
+            while (!openSet.empty()) {
+                delete openSet.back();
+                openSet.pop_back();
             }
-            break;
+            while (!closedSet.empty()) {
+                delete closedSet.back();
+                closedSet.pop_back();
+            }
+            return path;
         }
 
         for(int i = 0; i < 4; i++) {
@@ -34,16 +38,35 @@ void FindPath(Tile* src, Tile* dest) {
                                                     Direction::SOUTH,
                                                     Direction::WEST };
             Tile* currNB = currNode->GetTile()->GetNeighbour(neighbours[i]);
-            if (GetTileFromList(currNB, closedSet) != nullptr)
+            if (currNB == nullptr || !currNB->IsTraversable() || GetNodeFromList(currNB, closedSet) != nullptr)
                 continue;
 
-            if (TileInList(currNB, openSet)) {
-                openSet.push(new PathNode(currNB, currNode, currNode->GetGScore(), DistanceHeuristic(currNB, dest)));
+            PathNode* nbNode = GetNodeFromList(currNB, openSet);
+            if (nbNode == nullptr) {
+                nbNode = new PathNode(  currNB,
+                                        currNode,
+                                        currNode->GetGScore() + TILE_SIZE,
+                                        currNode->GetGScore() + TILE_SIZE + DistanceHeuristic(currNB, dest));
+
+                openSet.push_back(nbNode);
+                std::push_heap(openSet.begin(), openSet.end(), PathOrder);
             }
-
+            else {
+                int gScore = currNode->GetGScore() + TILE_SIZE;
+                if (gScore >= nbNode->GetGScore())
+                    continue;
+                nbNode->SetPredecessor(currNode);
+                nbNode->SetGScore(gScore);
+                nbNode->SetFScore(gScore + DistanceHeuristic(currNB, dest));
+                std::make_heap(openSet.begin(), openSet.end(), PathOrder);
+            }
         }
-
     }
+    while (!closedSet.empty()) {
+        delete closedSet.back();
+        closedSet.pop_back();
+    }
+    return nullptr;
 }
 
 int DistanceHeuristic(Tile* curr, Tile* dest) {
@@ -55,14 +78,6 @@ int DistanceHeuristic(Tile* curr, Tile* dest) {
     diffX *= diffX;
     diffY *= diffY;
     return sqrt(diffX + diffY);
-}
-
-std::vector<PathNode*> ReconstructPath(PathNode* dest) {
-    std::vector<PathNode*> path;
-    for(PathNode* curr = dest; curr != nullptr; curr = curr->GetPredecessor()) {
-        path.push_back(curr);
-    }
-    return path;
 }
 
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list) {

@@ -6,7 +6,7 @@
 class AtlasElement {
 
     Rect                rect;
-    const SDLSprite&    atlasSprite;
+    SDLSprite&          atlasSprite;    //TODO make const again
 
 
 public:
@@ -15,6 +15,7 @@ public:
 
     void            Draw(const Point& pos) const;
     Rect            GetRect() const;
+    void            MarkRed();
 
 
 };

@@ -38,6 +38,8 @@ public:
         void            Draw(const Point& camera, const Point& offset);
         void            AddRock(std::unique_ptr<Rock> rock_);
         bool            HasRock() const;
+        bool            IsTraversable() const;
+        void            MarkRed();
 
  };
 

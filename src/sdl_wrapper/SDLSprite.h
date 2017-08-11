@@ -25,5 +25,6 @@ public:
 
     void                SetAsRenderTarget();
     void                Draw(const Rect& srcRect, const Rect& destRect) const;
+    void                MarkRed(const Rect& rect);
 
 };

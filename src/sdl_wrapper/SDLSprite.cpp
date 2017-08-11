@@ -30,3 +30,9 @@ void SDLSprite::Draw(const Rect& srcRect, const Rect& destRect) const {
     if (SDL_RenderCopy(sdlWrapper.GetRenderer(), texture, &src, &dest) == -1)
 		throw SDLException("SDL_RenderCopy");
 }
+
+void SDLSprite::MarkRed(const Rect& rect) {
+    SetAsRenderTarget();
+    sdlWrapper.DrawRect(rect, Color{ 0xFF, 0, 0, 0xFF });
+    sdlWrapper.ClearRenderTarget();
+}

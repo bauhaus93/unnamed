@@ -16,7 +16,13 @@ public:
     PathNode*   GetPredecessor() const;
     int         GetGScore() const;
     int         GetFScore() const;
+
+    void        SetPredecessor(PathNode* pred_);
+    void        SetGScore(int gScore_);
+    void        SetFScore(int fScore_);
+
 };
 
 bool operator<(const PathNode& a, const PathNode& b);
+bool PathOrder(const PathNode* a, const PathNode* b);
 bool operator==(const PathNode& a, const PathNode& b);

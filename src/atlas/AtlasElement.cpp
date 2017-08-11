@@ -15,3 +15,7 @@ void AtlasElement::Draw(const Point& pos) const {
 Rect AtlasElement::GetRect() const {
     return rect;
 }
+
+void AtlasElement::MarkRed() {
+    atlasSprite.MarkRed(rect);
+}
