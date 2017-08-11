@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "map/Tile.h"
+#include "map/tile/Tile.h"
 #include "PathNode.h"
 
 namespace unnamed::map::pathfinding {

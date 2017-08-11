@@ -1,6 +1,6 @@
 #pragma once
 
-#include "map/Tile.h"
+#include "map/tile/Tile.h"
 
 namespace unnamed::map::pathfinding {
 

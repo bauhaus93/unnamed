@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "map/Tile.h"
+#include "map/tile/Tile.h"
 #include "logger/StdLogger.h"
 #include "PathNode.h"
 #include "Path.h"

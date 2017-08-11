@@ -18,7 +18,7 @@ class Game {
     sdl::Wrapper                        sdlWrapper;
     rng::Rng                            rng;
     atlas::Atlas                        atlas;
-    map::generator::LandscapeGenerator  landscapeGenerator;
+    map::LandscapeGenerator             landscapeGenerator;
     map::Map                            map;
 
 

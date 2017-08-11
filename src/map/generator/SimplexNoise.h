@@ -8,7 +8,7 @@
 
 #include "common/Rng.h"
 
-namespace unnamed::map::generator {
+namespace unnamed::map {
 
 class SimplexNoise{
 
