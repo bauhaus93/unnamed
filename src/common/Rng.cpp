@@ -1,5 +1,7 @@
 #include "Rng.h"
 
+namespace unnamed::rng {
+
 Rng::Rng():
     generator {},
     distribution100 { 0, 99 },
@@ -32,11 +34,13 @@ unsigned int Rng::Random100() {
 
 int Rng::Random(int min, int max){
     if (min >= max) {
-        throw GameException("Rng::Random", StringFormat("Min must be smaller than max, but was %d/%d", min, max));
+        throw exception::GameException("Rng::Random", StringFormat("Min must be smaller than max, but was %d/%d", min, max));
     }
 	return min + (distributionStd(generator) % (max - min + 1));
 }
 
 unsigned int Rng::Random() {
     return static_cast<unsigned int>(distributionStd(generator));
+}
+
 }

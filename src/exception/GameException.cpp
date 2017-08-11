@@ -1,5 +1,7 @@
 #include "GameException.h"
 
+namespace unnamed::exception {
+
 GameException::GameException(const std::string& error, const std::string& function, const std::string& description){
 	std::stringstream s;
 	s << error << " @ " << function << ": " << description;
@@ -8,5 +10,7 @@ GameException::GameException(const std::string& error, const std::string& functi
 
 GameException::GameException(const std::string& function, const std::string& description):
 	GameException { "GameException", function, description } {
+
+}
 
 }

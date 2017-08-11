@@ -1,13 +1,15 @@
 #include "PathNode.h"
 
-PathNode::PathNode(Tile* tile_, PathNode* pred_, int gScore_, int fScore_):
+namespace unnamed::map::pathfinding {
+
+PathNode::PathNode(map::Tile* tile_, PathNode* pred_, int gScore_, int fScore_):
     tile { tile_ },
     pred { pred_ },
     gScore { gScore_ },
     fScore { fScore_ } {
 }
 
-Tile* PathNode::GetTile() const {
+map::Tile* PathNode::GetTile() const {
     return tile;
 }
 
@@ -45,4 +47,6 @@ bool PathOrder(const PathNode* a, const PathNode* b) {
 
 bool operator==(const PathNode& a, const PathNode& b) {
     return a.GetTile() == b.GetTile();
+}
+
 }

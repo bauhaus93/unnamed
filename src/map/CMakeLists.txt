@@ -5,3 +5,5 @@ add_sources(
   LandscapeGenerator.cpp
   Rock.cpp
 )
+
+add_subdirectory(pathfinding)

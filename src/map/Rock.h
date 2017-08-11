@@ -4,13 +4,17 @@
 #include "common/Point.h"
 #include "atlas/AtlasElement.h"
 
+namespace unnamed::map {
+
 class Rock {
 
-    AtlasElement&       sprite;
+    atlas::AtlasElement&    sprite;
 
 public:
-    explicit            Rock(AtlasElement& sprite_);
+    explicit                Rock(atlas::AtlasElement& sprite_);
 
-    AtlasElement&       GetSprite() const;
+    atlas::AtlasElement&      GetSprite() const;
 
 };
+
+}

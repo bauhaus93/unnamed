@@ -1,11 +1,14 @@
 #include "Rock.h"
 
+namespace unnamed::map {
 
-Rock::Rock(AtlasElement& sprite_):
+Rock::Rock(atlas::AtlasElement& sprite_):
     sprite { sprite_ } {
 
 }
 
-AtlasElement& Rock::GetSprite() const{
+atlas::AtlasElement& Rock::GetSprite() const{
     return sprite;
+}
+
 }

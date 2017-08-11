@@ -1,5 +1,7 @@
 #include "Event.h"
 
+namespace unnamed::event {
+
 Event::Event():
     type { EventType::NONE } {
 }
@@ -19,4 +21,6 @@ EventType Event::GetType() const {
 
 void Event::SetType(EventType type_) {
     type = type_;
+}
+
 }

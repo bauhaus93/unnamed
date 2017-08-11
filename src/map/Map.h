@@ -10,6 +10,8 @@
 #include "SimplexNoise.h"
 #include "LandscapeGenerator.h"
 
+namespace unnamed::map {
+
 class Map {
 
     Size                size;
@@ -26,3 +28,5 @@ public:
     void                MoveCamera(Direction dir);
 
 };
+
+}

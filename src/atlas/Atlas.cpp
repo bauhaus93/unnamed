@@ -1,9 +1,10 @@
 #include "Atlas.h"
 
+namespace unnamed::atlas {
+
 static Size CalculateSize(const Size& exactFit, const Size& maxSize);
 
-
-Atlas::Atlas(SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
+Atlas::Atlas(sdl::SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
     size { CalculateSize(exactFit, maxSize) },
     sprite { sdlWrapper, size },
     root { std::make_unique<Node>(Rect{ 0, 0, size.x, size.y })} {
@@ -35,7 +36,7 @@ void Atlas::SetAsRenderTarget() {
 
 Size CalculateSize(const Size& exactFit, const Size& maxSize) {
     if (exactFit.x > maxSize.x || exactFit.y > maxSize.y) {
-        throw GameException("CalculateSize", "Max atlas size must be at least as big as demanded exact fit");
+        throw exception::GameException("CalculateSize", "Max atlas size must be at least as big as demanded exact fit");
     }
 
     Size currSize { exactFit.x, exactFit.y };
@@ -45,4 +46,6 @@ Size CalculateSize(const Size& exactFit, const Size& maxSize) {
         currSize.y *= 2;
     }
     return currSize;
+}
+
 }

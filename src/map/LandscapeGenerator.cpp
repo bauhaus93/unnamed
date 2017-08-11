@@ -1,8 +1,10 @@
 #include "LandscapeGenerator.h"
 
+namespace unnamed::map {
+
 int distance(const Point& a, const Point& b);
 
-LandscapeGenerator::LandscapeGenerator(SDLWrapper& sdlWrapper_, Atlas& atlas_, unsigned int seed):
+LandscapeGenerator::LandscapeGenerator(sdl::SDLWrapper& sdlWrapper_, atlas::Atlas& atlas_, unsigned int seed):
     sdlWrapper { sdlWrapper_ },
     atlas { atlas_ },
     rng { seed },
@@ -48,7 +50,7 @@ Tile* LandscapeGenerator::Generate(const Rect& fieldRect) {
 }
 
 Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
-    AtlasElement& element = CreateFloorSprite(tileRect);
+    atlas::AtlasElement& element = CreateFloorSprite(tileRect);
     Tile* tile = new Tile(Point{ tileRect.x, tileRect.y }, element);
     uint8_t rockMask = GetNeighbourRockMask(tileRect);
 
@@ -60,8 +62,8 @@ Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
     return tile;
 }
 
-AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
-    AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+atlas::AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
+    atlas::AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
 
     atlas.SetAsRenderTarget();
 
@@ -98,16 +100,12 @@ AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
 }
 
 
-
-
-AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
-    AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+atlas::AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
+    atlas::AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
     Rect spriteRect = element.GetRect();
     const int CORNER_RADIUS = 14;
 
     atlas.SetAsRenderTarget();
-
-
 
     if (rockMask == (1 | 2 | 4 | 8)) {
         sdlWrapper.DrawFillRect(spriteRect, Color{ 0x50, 0x50, 0x50, 0xFF });
@@ -214,4 +212,6 @@ int distance(const Point& a, const Point& b) {
     diffX *= diffX;
     diffY *= diffY;
     return sqrt(diffX + diffY);
+}
+
 }

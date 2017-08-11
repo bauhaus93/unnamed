@@ -5,6 +5,8 @@
 #include <string>
 #include <memory>
 
+namespace unnamed::logging {
+
 enum class LogLevel {
     DEBUG = 0,
     INFO = 1,
@@ -30,3 +32,5 @@ public:
      void           Warn(const std::string& msg);
      void           Error(const std::string& msg);
 };
+
+}

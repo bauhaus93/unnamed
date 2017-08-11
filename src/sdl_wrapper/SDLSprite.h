@@ -12,6 +12,8 @@
 #include "common/Rect.h"
 #include "common/Size.h"
 
+namespace unnamed::sdl {
+
 class SDLSprite {
 
     SDLWrapper&         sdlWrapper;
@@ -28,3 +30,5 @@ public:
     void                MarkRed(const Rect& rect);
 
 };
+
+}

@@ -1,6 +1,8 @@
 #include "FindPath.h"
 
-int DistanceHeuristic(Tile* curr, Tile* dest);
+namespace unnamed::map::pathfinding {
+
+int DistanceHeuristic(Tile* curr, map::Tile* dest);
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list);
 
 std::unique_ptr<Path> FindPath(Tile* src, Tile* dest) {
@@ -86,4 +88,6 @@ PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list) {
             return e;
     }
     return nullptr;
+}
+
 }

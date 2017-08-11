@@ -1,7 +1,9 @@
 #include "SDLWrapper.h"
 
-Uint32 RenderCallback(Uint32 delay, void* params);
-Uint32 UpdateCallback(Uint32 delay, void* params);
+namespace unnamed::sdl {
+
+static Uint32 RenderCallback(Uint32 delay, void* params);
+static Uint32 UpdateCallback(Uint32 delay, void* params);
 
 SDLWrapper::SDLWrapper(const std::string& windowTitle, const Size& windowSize):
     window { nullptr },
@@ -203,9 +205,9 @@ void SDLWrapper::StopTimers() {
     }
 }
 
-std::unique_ptr<Event> SDLWrapper::WaitEvent() {
+std::unique_ptr<event::Event> SDLWrapper::WaitEvent() {
     SDL_Event sdlEvent;
-    std::unique_ptr<Event> event = nullptr;
+    std::unique_ptr<event::Event> event = nullptr;
 
     while (event == nullptr) {
 
@@ -213,26 +215,26 @@ std::unique_ptr<Event> SDLWrapper::WaitEvent() {
             throw SDLException("SDL_WaitEvent");
         }
         if (sdlEvent.type == eventTypeRender) {
-            event = std::make_unique<Event>(EventType::RENDER);
+            event = std::make_unique<event::Event>(event::EventType::RENDER);
         }
         else if (sdlEvent.type == eventTypeUpdate) {
-            event = std::make_unique<Event>(EventType::UPDATE);
+            event = std::make_unique<event::Event>(event::EventType::UPDATE);
         }
         else {
             switch (sdlEvent.type){
             case SDL_QUIT:
-                event = std::make_unique<Event>(EventType::QUIT);
+                event = std::make_unique<event::Event>(event::EventType::QUIT);
                 break;
             case SDL_KEYDOWN:
-                Key key;
+                event::Key key;
                 switch(sdlEvent.key.keysym.sym) {
-                case SDLK_UP: key = Key::UP;          break;
-                case SDLK_DOWN: key = Key::DOWN;      break;
-                case SDLK_LEFT: key = Key::LEFT;      break;
-                case SDLK_RIGHT: key = Key::RIGHT;    break;
-                default: key = Key::UNKNOWN;          break;
+                case SDLK_UP: key = event::Key::UP;          break;
+                case SDLK_DOWN: key = event::Key::DOWN;      break;
+                case SDLK_LEFT: key = event::Key::LEFT;      break;
+                case SDLK_RIGHT: key = event::Key::RIGHT;    break;
+                default: key = event::Key::UNKNOWN;          break;
                 }
-                event = std::make_unique<EventKeyDown>(key);
+                event = std::make_unique<event::EventKeyDown>(key);
                 break;
             }
         }
@@ -263,4 +265,6 @@ Uint32 UpdateCallback(Uint32 interval, void* param) {
     SDL_PushEvent(&event);
 
     return interval;
+}
+
 }

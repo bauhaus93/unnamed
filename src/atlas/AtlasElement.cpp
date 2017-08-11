@@ -1,7 +1,8 @@
 #include "AtlasElement.h"
 
+namespace unnamed::atlas {
 
-AtlasElement::AtlasElement(const Rect& rect_, SDLSprite& atlasSprite_):
+AtlasElement::AtlasElement(const Rect& rect_, sdl::SDLSprite& atlasSprite_):
     rect { rect_ },
     atlasSprite { atlasSprite_ } {
 
@@ -18,4 +19,6 @@ Rect AtlasElement::GetRect() const {
 
 void AtlasElement::MarkRed() {
     atlasSprite.MarkRed(rect);
+}
+
 }

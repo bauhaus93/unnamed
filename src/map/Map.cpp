@@ -1,5 +1,7 @@
 #include "Map.h"
 
+namespace unnamed::map {
+
 Map::Map(const Size& size_, LandscapeGenerator& landscapeGenerator_):
     size { size_ },
     landscapeGenerator { landscapeGenerator_ },
@@ -55,4 +57,6 @@ void Map::MoveCamera(Direction dir) {
     if (nb != nullptr) {
         camera = nb;
     }
+}
+
 }

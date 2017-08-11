@@ -5,6 +5,8 @@
 
 #include "Logger.h"
 
+namespace unnamed::logging {
+
 class FileLogger: public Logger {
 
 	std::ofstream       file;
@@ -15,3 +17,5 @@ public:
                         FileLogger(LogLevel logLevel_, const std::string& filename);
 						~FileLogger();
 };
+
+}

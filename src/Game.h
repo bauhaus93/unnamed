@@ -11,24 +11,25 @@
 #include "map/Map.h"
 #include "map/LandscapeGenerator.h"
 
+namespace unnamed {
 
 class Game {
 
-    SDLWrapper          sdlWrapper;
-    Rng                 rng;
-    Atlas               atlas;
-    LandscapeGenerator  landscapeGenerator;
-    Map                 map;
+    sdl::SDLWrapper             sdlWrapper;
+    rng::Rng                    rng;
+    atlas::Atlas                atlas;
+    map::LandscapeGenerator     landscapeGenerator;
+    map::Map                    map;
 
 
     void            Render();
     void            Update();
-    void            HandleKeyDown(EventKeyDown& event);
+    void            HandleKeyDown(event::EventKeyDown& event);
 
 public:
 
     explicit        Game(const Size& windowSize);
     void            Loop();
-
-
 };
+
+}

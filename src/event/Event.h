@@ -1,5 +1,7 @@
 #pragma once
 
+namespace unnamed::event {
+
 enum class EventType {
     NONE,
     RENDER,
@@ -23,3 +25,5 @@ public:
     void            SetType(EventType type_);
 
 };
+
+}

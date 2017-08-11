@@ -1,5 +1,7 @@
 #include "FileLogger.h"
 
+namespace unnamed::logging {
+
 FileLogger::FileLogger(LogLevel logLevel_, const std::string& filename):
     Logger(logLevel_),
     file { filename } {
@@ -11,4 +13,6 @@ FileLogger::~FileLogger() {
 
 void FileLogger::Log(const std::string& msg) {
     file << msg << std::endl;
+}
+
 }

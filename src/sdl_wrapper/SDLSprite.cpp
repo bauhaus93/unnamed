@@ -1,5 +1,7 @@
 #include "SDLSprite.h"
 
+namespace unnamed::sdl {
+
 SDLSprite::SDLSprite(SDLWrapper& sdlWrapper_, const Size& size):
     sdlWrapper { sdlWrapper_ },
     texture { nullptr } {
@@ -35,4 +37,6 @@ void SDLSprite::MarkRed(const Rect& rect) {
     SetAsRenderTarget();
     sdlWrapper.DrawRect(rect, Color{ 0xFF, 0, 0, 0xFF });
     sdlWrapper.ClearRenderTarget();
+}
+
 }

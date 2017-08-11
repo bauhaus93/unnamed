@@ -14,6 +14,8 @@
 
 #define TILE_SIZE 50
 
+namespace unnamed::map {
+
 enum class Direction {
     NORTH = 0,
     EAST = 1,
@@ -25,12 +27,12 @@ class Tile {
 
     Rect                    rect;
     Tile*                   neighbour[4];
-    AtlasElement&           sprite;
+    atlas::AtlasElement&    sprite;
     std::unique_ptr<Rock>   rock;
 
 public:
 
-                        Tile(const Point& pos, AtlasElement& sprite_);
+                        Tile(const Point& pos, atlas::AtlasElement& sprite_);
         void            SetNeighbour(Direction dir, Tile* tile);
 
         Tile*           GetNeighbour(Direction dir) const;
@@ -44,3 +46,5 @@ public:
  };
 
 void LinkRows(Tile* topRow, Tile* botRow);
+
+}

@@ -23,7 +23,7 @@
 #include "common/Rect.h"
 #include "common/StringFormat.h"
 
-
+namespace unnamed::sdl {
 
 class SDLWrapper {
 
@@ -56,8 +56,10 @@ public:
 
         void                    StartTimers();
         void                    StopTimers();
-        std::unique_ptr<Event>  WaitEvent();
+        std::unique_ptr<event::Event>  WaitEvent();
 
         SDL_Renderer*           GetRenderer() const;
 
 };
+
+}

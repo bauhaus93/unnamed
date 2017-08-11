@@ -11,19 +11,23 @@
 #include "Node.h"
 #include "AtlasElement.h"
 
+namespace unnamed::atlas {
+
 class Atlas {
 
     Size                    size;
-    SDLSprite               sprite;
+    sdl::SDLSprite          sprite;
     std::unique_ptr<Node>   root;
 
 
 
 public:
 
-                            Atlas(SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
+                            Atlas(sdl::SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
         AtlasElement&       AddElement(const Size& size);
         void                Draw(const Rect& rect) const;
         void                SetAsRenderTarget();
 
 };
+
+}

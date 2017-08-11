@@ -8,10 +8,12 @@
 
 #include "common/Rng.h"
 
+namespace unnamed::map {
+
 class SimplexNoise{
 
 
-    Rng                     rng;
+    rng::Rng                rng;
     std::vector<uint8_t>    permutation;
 
     double              Fade(double t);
@@ -26,3 +28,5 @@ public:
     double          GetNoise(double x, double y);
     double          GetOctavedNoise(int x, int y, int octaves, double roughness, double scale);
 };
+
+}

@@ -1,5 +1,6 @@
 #include "Logger.h"
 
+namespace unnamed::logging {
 
 Logger::Logger(LogLevel logLevel_):
     logLevel { logLevel_ },
@@ -65,4 +66,6 @@ std::string Logger::CreateLogMessage(const std::string& level, const std::string
 
 void Logger::Log(const std::string& msg) {
     std::cerr << msg << std::endl;
+}
+
 }

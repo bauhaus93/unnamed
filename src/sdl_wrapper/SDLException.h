@@ -9,10 +9,14 @@
 
 #include "exception/GameException.h"
 
-class SDLException: public GameException {
+namespace unnamed::sdl {
+
+class SDLException: public exception::GameException {
 
 public:
     explicit				SDLException(const std::string& function);
 
 
 };
+
+}

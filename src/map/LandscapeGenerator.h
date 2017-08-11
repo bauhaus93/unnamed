@@ -8,22 +8,26 @@
 #include "SimplexNoise.h"
 #include "Tile.h"
 
+namespace unnamed::map {
+
 class LandscapeGenerator {
 
-    SDLWrapper&             sdlWrapper;
-    Atlas&                  atlas;
-    Rng                     rng;
+    sdl::SDLWrapper&        sdlWrapper;
+    atlas::Atlas&           atlas;
+    rng::Rng                rng;
     SimplexNoise            floorVariationNoise;
     SimplexNoise            rockNoise;
 
     Tile*                   CreateTile(const Rect& tileRect);
-    AtlasElement&           CreateFloorSprite(const Rect& tileRect);
-    AtlasElement&           CreateRockSprite(const Rect& rect, uint8_t rockMask);
+    atlas::AtlasElement&    CreateFloorSprite(const Rect& tileRect);
+    atlas::AtlasElement&    CreateRockSprite(const Rect& rect, uint8_t rockMask);
     bool                    HasRock(const Rect& tileRect);
     uint8_t                 GetNeighbourRockMask(const Rect& tileRect);
 
 public:
-                            LandscapeGenerator(SDLWrapper& sdlWrapper_, Atlas& atlas, unsigned int seed);
+                            LandscapeGenerator(sdl::SDLWrapper& sdlWrapper_, atlas::Atlas& atlas, unsigned int seed);
     Tile*                   Generate(const Rect& fieldRect);
 
 };
+
+}

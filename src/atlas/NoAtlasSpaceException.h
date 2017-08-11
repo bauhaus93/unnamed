@@ -7,8 +7,12 @@
 #include "common/Size.h"
 #include "common/StringFormat.h"
 
-class NoAtlasSpaceException : public GameException {
+namespace unnamed::atlas {
+
+class NoAtlasSpaceException : public exception::GameException {
 
 public:
     explicit NoAtlasSpaceException(const Size& size);
 };
+
+}

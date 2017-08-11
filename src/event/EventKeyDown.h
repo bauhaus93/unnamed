@@ -2,6 +2,8 @@
 
 #include "Event.h"
 
+namespace unnamed::event {
+
 enum class Key {
     UNKNOWN,
     UP,
@@ -18,3 +20,5 @@ public:
     explicit    EventKeyDown(Key key_);
     Key         GetKey() const;
 };
+
+}

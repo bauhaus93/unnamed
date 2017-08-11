@@ -1,5 +1,6 @@
 #include "Path.h"
 
+namespace unnamed::map::pathfinding {
 
 Path::Path(PathNode* dest) {
     for(PathNode* curr = dest; curr != nullptr; curr = curr->GetPredecessor()) {
@@ -14,4 +15,6 @@ Tile* Path::GetNextTile() {
         return t;
     }
     return nullptr;
+}
+
 }

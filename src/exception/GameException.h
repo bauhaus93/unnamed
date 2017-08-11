@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+namespace unnamed::exception {
+
 class GameException : public std::exception{
 
 	std::string msg;
@@ -16,3 +18,5 @@ public:
 
 	const char*			what() const throw(){ return msg.c_str(); };
 };
+
+}

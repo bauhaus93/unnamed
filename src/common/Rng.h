@@ -4,6 +4,8 @@
 #include "exception/GameException.h"
 #include "common/StringFormat.h"
 
+namespace unnamed::rng {
+
 class Rng {
 
     std::mt19937                        generator;
@@ -25,3 +27,5 @@ public:
     int             Random(int min, int max);
     unsigned int    Random();
 };
+
+}

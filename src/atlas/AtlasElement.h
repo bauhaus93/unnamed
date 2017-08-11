@@ -3,15 +3,17 @@
 #include "common/Rect.h"
 #include "sdl_wrapper/SDLSprite.h"
 
+namespace unnamed::atlas {
+
 class AtlasElement {
 
     Rect                rect;
-    SDLSprite&          atlasSprite;    //TODO make const again
+    sdl::SDLSprite&     atlasSprite;    //TODO make const again (conflicts with MarkRed herper method)
 
 
 public:
 
-                    AtlasElement(const Rect& rect, SDLSprite& atlasSprite_);
+                    AtlasElement(const Rect& rect, sdl::SDLSprite& atlasSprite_);
 
     void            Draw(const Point& pos) const;
     Rect            GetRect() const;
@@ -19,3 +21,5 @@ public:
 
 
 };
+
+}

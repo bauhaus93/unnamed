@@ -1,8 +1,8 @@
 #include "Tile.h"
 
+namespace unnamed::map {
 
-
-Tile::Tile(const Point& pos, AtlasElement& sprite_):
+Tile::Tile(const Point& pos, atlas::AtlasElement& sprite_):
     rect { pos.x, pos.y, TILE_SIZE, TILE_SIZE },
     neighbour { nullptr, nullptr, nullptr, nullptr },
     sprite { sprite_ },
@@ -87,4 +87,6 @@ void LinkRows(Tile* topRow, Tile* botRow) {
             topRow,
             botRow));
     }
+}
+
 }

@@ -5,6 +5,8 @@
 #include "map/Tile.h"
 #include "PathNode.h"
 
+namespace unnamed::map::pathfinding {
+
 class Path {
 
     std::vector<Tile*>  waypoints;
@@ -13,6 +15,8 @@ public:
 
     explicit            Path(PathNode* dest);
 
-    Tile*               GetNextTile();
+    map::Tile*          GetNextTile();
 
 };
+
+}

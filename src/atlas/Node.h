@@ -10,6 +10,8 @@
 #include "AtlasElement.h"
 #include "NoAtlasSpaceException.h"
 
+namespace unnamed::atlas {
+
 class Node {
 
     std::unique_ptr<Node>           subTree[4];
@@ -28,6 +30,8 @@ public:
     Size                        GetSubSpace() const;
     void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
-    AtlasElement&               AddElement(const Size& size, SDLSprite& atlasSprite);
+    AtlasElement&               AddElement(const Size& size, sdl::SDLSprite& atlasSprite);
 
 };
+
+}

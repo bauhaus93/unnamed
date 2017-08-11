@@ -1,5 +1,6 @@
 #include "Game.h"
 
+namespace unnamed {
 
 Game::Game(const Size& windowSize):
     sdlWrapper { "unnamed", windowSize },
@@ -19,18 +20,18 @@ void Game::Loop() {
     while (!quit) {
         auto event = sdlWrapper.WaitEvent();
         switch (event->GetType()) {
-        case EventType::RENDER:
+        case event::EventType::RENDER:
             Render();
             break;
-        case EventType::UPDATE:
+        case event::EventType::UPDATE:
             Update();
             break;
-        case EventType::QUIT:
+        case event::EventType::QUIT:
             INFO("Received quit event");
             quit = true;
             break;
-        case EventType::KEY_DOWN:
-            HandleKeyDown(static_cast<EventKeyDown&>(*event));
+        case event::EventType::KEY_DOWN:
+            HandleKeyDown(static_cast<event::EventKeyDown&>(*event));
             break;
         default:
             WARN("Unknown event");
@@ -57,12 +58,14 @@ void Game::Render() {
 void Game::Update() {
 }
 
-void Game::HandleKeyDown(EventKeyDown& event) {
+void Game::HandleKeyDown(event::EventKeyDown& event) {
     switch (event.GetKey()) {
-    case Key::UP:       map.MoveCamera(Direction::NORTH);   break;
-    case Key::DOWN:     map.MoveCamera(Direction::SOUTH);   break;
-    case Key::LEFT:     map.MoveCamera(Direction::WEST);    break;
-    case Key::RIGHT:    map.MoveCamera(Direction::EAST);    break;
-    default:            INFO("Unhandled key pressed");      break;
+    case event::Key::UP:       map.MoveCamera(map::Direction::NORTH);   break;
+    case event::Key::DOWN:     map.MoveCamera(map::Direction::SOUTH);   break;
+    case event::Key::LEFT:     map.MoveCamera(map::Direction::WEST);    break;
+    case event::Key::RIGHT:    map.MoveCamera(map::Direction::EAST);    break;
+    default:                   INFO("Unhandled key pressed");           break;
     }
+}
+
 }

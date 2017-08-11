@@ -1,5 +1,6 @@
 #include "Node.h"
 
+namespace unnamed::atlas {
 
 Node::Node(const Rect& rect_):
     subTree { nullptr, nullptr, nullptr, nullptr },
@@ -70,7 +71,7 @@ void Node::RecalculateSubSpace() {
     subSpace = maxSize;
 }
 
-AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
+AtlasElement& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
     DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
     if (FitsInSubTree(size)) {
@@ -105,4 +106,6 @@ AtlasElement& Node::AddElement(const Size& size, SDLSprite& atlasSprite) {
         return *element;
     }
     throw NoAtlasSpaceException(size);
+}
+
 }
