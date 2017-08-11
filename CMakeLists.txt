@@ -22,16 +22,14 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 		set(COMPILE_FLAGS "-std=c++14 -Wall -ferror-limit=1")
 		set(LINK_FLAGS "--std=c++14 -Wall -ferror-limit=1")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-	set(COMPILE_FLAGS "/W4 /std:c++latest")
-	#set(LINK_FLAGS "/NODEFAULTLIB:msvcrtd.lib")
+	set(COMPILE_FLAGS "/W4 /std:c++latest /MP")
+	set(LINK_FLAGS "/NODEFAULTLIB:msvcrtd.lib")
 endif()
 
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILE_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LINK_FLAGS}")
-
-
 
 add_executable(unnamed "")
 
