@@ -71,14 +71,14 @@ void Node::RecalculateSubSpace() {
     subSpace = maxSize;
 }
 
-AtlasElement& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
+Element& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
     DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
     if (FitsInSubTree(size)) {
         if (!HasSubTree()) {
             ExpandTree();
             DEBUG("Expanded tree");
-            AtlasElement& element = subTree[0]->AddElement(size, atlasSprite);
+            Element& element = subTree[0]->AddElement(size, atlasSprite);
             RecalculateSubSpace();
             return element;
         }
@@ -87,7 +87,7 @@ AtlasElement& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
                 Size maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
                 if (size.x <= maxSize.x && size.y <= maxSize.y) {
-                    AtlasElement& element = subTree[i]->AddElement(size, atlasSprite);
+                    Element& element = subTree[i]->AddElement(size, atlasSprite);
                     RecalculateSubSpace();
                     return element;
                 }
@@ -95,7 +95,7 @@ AtlasElement& Node::AddElement(const Size& size, sdl::SDLSprite& atlasSprite) {
         }
     }
     else if (FitsInMe(size) && IsLeaf()){
-        element = std::make_unique<AtlasElement>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
+        element = std::make_unique<Element>(Rect{ rect.x, rect.y, size.x, size.y}, atlasSprite);
         DEBUG(StringFormat("New atlas element (%d, %d, %d, %d) in %d/%d",   rect.x,
                                                                             rect.y,
                                                                             size.x,

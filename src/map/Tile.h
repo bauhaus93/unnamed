@@ -7,7 +7,7 @@
 #include "common/Rng.h"
 #include "common/StringFormat.h"
 #include "atlas/Atlas.h"
-#include "atlas/AtlasElement.h"
+#include "atlas/Element.h"
 #include "sdl_wrapper/SDLWrapper.h"
 #include "logger/StdLogger.h"
 #include "Rock.h"
@@ -27,12 +27,12 @@ class Tile {
 
     Rect                    rect;
     Tile*                   neighbour[4];
-    atlas::AtlasElement&    sprite;
+    atlas::Element&         sprite;
     std::unique_ptr<Rock>   rock;
 
 public:
 
-                        Tile(const Point& pos, atlas::AtlasElement& sprite_);
+                        Tile(const Point& pos, atlas::Element& sprite_);
         void            SetNeighbour(Direction dir, Tile* tile);
 
         Tile*           GetNeighbour(Direction dir) const;

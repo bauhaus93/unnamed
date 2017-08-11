@@ -5,7 +5,7 @@
 
 namespace unnamed::atlas {
 
-class AtlasElement {
+class Element {
 
     Rect                rect;
     sdl::SDLSprite&     atlasSprite;    //TODO make const again (conflicts with MarkRed herper method)
@@ -13,7 +13,7 @@ class AtlasElement {
 
 public:
 
-                    AtlasElement(const Rect& rect, sdl::SDLSprite& atlasSprite_);
+                    Element(const Rect& rect, sdl::SDLSprite& atlasSprite_);
 
     void            Draw(const Point& pos) const;
     Rect            GetRect() const;

@@ -19,8 +19,8 @@ class LandscapeGenerator {
     SimplexNoise            rockNoise;
 
     Tile*                   CreateTile(const Rect& tileRect);
-    atlas::AtlasElement&    CreateFloorSprite(const Rect& tileRect);
-    atlas::AtlasElement&    CreateRockSprite(const Rect& rect, uint8_t rockMask);
+    atlas::Element&         CreateFloorSprite(const Rect& tileRect);
+    atlas::Element&         CreateRockSprite(const Rect& rect, uint8_t rockMask);
     bool                    HasRock(const Rect& tileRect);
     uint8_t                 GetNeighbourRockMask(const Rect& tileRect);
 

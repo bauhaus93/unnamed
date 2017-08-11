@@ -50,7 +50,7 @@ Tile* LandscapeGenerator::Generate(const Rect& fieldRect) {
 }
 
 Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
-    atlas::AtlasElement& element = CreateFloorSprite(tileRect);
+    atlas::Element& element = CreateFloorSprite(tileRect);
     Tile* tile = new Tile(Point{ tileRect.x, tileRect.y }, element);
     uint8_t rockMask = GetNeighbourRockMask(tileRect);
 
@@ -62,8 +62,8 @@ Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
     return tile;
 }
 
-atlas::AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
-    atlas::AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+atlas::Element& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
+    atlas::Element& element = atlas.AddElement(Size{ rect.w, rect.h });
 
     atlas.SetAsRenderTarget();
 
@@ -100,8 +100,8 @@ atlas::AtlasElement& LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
 }
 
 
-atlas::AtlasElement& LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
-    atlas::AtlasElement& element = atlas.AddElement(Size{ rect.w, rect.h });
+atlas::Element& LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
+    atlas::Element& element = atlas.AddElement(Size{ rect.w, rect.h });
     Rect spriteRect = element.GetRect();
     const int CORNER_RADIUS = 14;
 

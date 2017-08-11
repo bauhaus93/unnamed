@@ -2,12 +2,12 @@
 
 namespace unnamed::map {
 
-Rock::Rock(atlas::AtlasElement& sprite_):
+Rock::Rock(atlas::Element& sprite_):
     sprite { sprite_ } {
 
 }
 
-atlas::AtlasElement& Rock::GetSprite() const{
+atlas::Element& Rock::GetSprite() const{
     return sprite;
 }
 

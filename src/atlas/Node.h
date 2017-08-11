@@ -7,7 +7,7 @@
 #include "common/Size.h"
 #include "common/StringFormat.h"
 #include "logger/StdLogger.h"
-#include "AtlasElement.h"
+#include "Element.h"
 #include "NoAtlasSpaceException.h"
 
 namespace unnamed::atlas {
@@ -15,7 +15,7 @@ namespace unnamed::atlas {
 class Node {
 
     std::unique_ptr<Node>           subTree[4];
-    std::unique_ptr<AtlasElement>   element;
+    std::unique_ptr<Element>        element;
     Rect                            rect;
     Size                            subSpace;
 
@@ -30,7 +30,7 @@ public:
     Size                        GetSubSpace() const;
     void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
-    AtlasElement&               AddElement(const Size& size, sdl::SDLSprite& atlasSprite);
+    Element&                    AddElement(const Size& size, sdl::SDLSprite& atlasSprite);
 
 };
 

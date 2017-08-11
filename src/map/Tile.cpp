@@ -2,7 +2,7 @@
 
 namespace unnamed::map {
 
-Tile::Tile(const Point& pos, atlas::AtlasElement& sprite_):
+Tile::Tile(const Point& pos, atlas::Element& sprite_):
     rect { pos.x, pos.y, TILE_SIZE, TILE_SIZE },
     neighbour { nullptr, nullptr, nullptr, nullptr },
     sprite { sprite_ },

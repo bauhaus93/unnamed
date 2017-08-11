@@ -2,18 +2,18 @@
 
 #include "common/Rect.h"
 #include "common/Point.h"
-#include "atlas/AtlasElement.h"
+#include "atlas/Element.h"
 
 namespace unnamed::map {
 
 class Rock {
 
-    atlas::AtlasElement&    sprite;
+    atlas::Element&    sprite;
 
 public:
-    explicit                Rock(atlas::AtlasElement& sprite_);
+    explicit                Rock(atlas::Element& sprite_);
 
-    atlas::AtlasElement&      GetSprite() const;
+    atlas::Element&      GetSprite() const;
 
 };
 

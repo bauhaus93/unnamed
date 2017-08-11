@@ -9,7 +9,7 @@
 #include "common/Point.h"
 #include "exception/GameException.h"
 #include "Node.h"
-#include "AtlasElement.h"
+#include "Element.h"
 
 namespace unnamed::atlas {
 
@@ -24,7 +24,7 @@ class Atlas {
 public:
 
                             Atlas(sdl::SDLWrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
-        AtlasElement&       AddElement(const Size& size);
+        Element&            AddElement(const Size& size);
         void                Draw(const Rect& rect) const;
         void                SetAsRenderTarget();
 
