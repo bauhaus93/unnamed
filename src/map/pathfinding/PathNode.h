@@ -2,7 +2,7 @@
 
 #include "map/tile/Tile.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 class PathNode {
 

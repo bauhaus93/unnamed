@@ -1,6 +1,6 @@
 #include "PathNode.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 PathNode::PathNode(map::Tile* tile_, PathNode* pred_, int gScore_, int fScore_):
     tile { tile_ },

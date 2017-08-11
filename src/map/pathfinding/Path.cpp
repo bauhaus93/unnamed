@@ -1,6 +1,6 @@
 #include "Path.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 Path::Path(PathNode* dest) {
     for(PathNode* curr = dest; curr != nullptr; curr = curr->GetPredecessor()) {

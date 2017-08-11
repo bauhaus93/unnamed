@@ -1,6 +1,6 @@
 #include "FindPath.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 int DistanceHeuristic(Tile* curr, map::Tile* dest);
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list);

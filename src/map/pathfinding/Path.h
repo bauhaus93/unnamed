@@ -5,7 +5,7 @@
 #include "map/tile/Tile.h"
 #include "PathNode.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 class Path {
 

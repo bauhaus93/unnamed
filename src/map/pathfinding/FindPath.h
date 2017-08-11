@@ -9,7 +9,7 @@
 #include "PathNode.h"
 #include "Path.h"
 
-namespace unnamed::map::pathfinding {
+namespace unnamed::map {
 
 std::unique_ptr<Path> FindPath(Tile* src, Tile* dest);
 
