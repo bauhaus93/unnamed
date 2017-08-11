@@ -47,7 +47,12 @@ std::string Logger::CreateLogMessage(const std::string& level, const std::string
     std::string logMsg(len, 0);
 
     time(&rawTime);
+    #ifdef _WIN32
     localtime_s(&localTime, &rawTime);
+    #endif
+    #ifdef __linux__
+    localtime_r(&rawTime, &localTime);
+    #endif
 
     len = snprintf(&logMsg[0], len, "[%04d-%02d-%02d %02d:%02d:%02d] %s - %s",
         localTime.tm_year + 1900,

@@ -1,6 +1,9 @@
 #pragma once
 
-#define __STDC_WANT_LIB_EXT1__ 
+//for localtime_s usage
+#ifdef _WIN32
+#define __STDC_WANT_LIB_EXT1__
+#endif
 
 #include <iostream>
 #include <ctime>
