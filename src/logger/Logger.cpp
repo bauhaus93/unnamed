@@ -42,20 +42,20 @@ void Logger::Error(const std::string& msg) {
 
 std::string Logger::CreateLogMessage(const std::string& level, const std::string& msg) {
     time_t rawTime;
-    struct tm* localTime;
+    struct tm localTime;
     size_t len = msg.length() + level.length() + 26;
     std::string logMsg(len, 0);
 
     time(&rawTime);
-    localTime = localtime(&rawTime);
+    localtime_s(&localTime, &rawTime);
 
     len = snprintf(&logMsg[0], len, "[%04d-%02d-%02d %02d:%02d:%02d] %s - %s",
-        localTime->tm_year + 1900,
-        localTime->tm_mon + 1,
-        localTime->tm_mday,
-        localTime->tm_hour,
-        localTime->tm_min,
-        localTime->tm_sec,
+        localTime.tm_year + 1900,
+        localTime.tm_mon + 1,
+        localTime.tm_mday,
+        localTime.tm_hour,
+        localTime.tm_min,
+        localTime.tm_sec,
         level.c_str(),
         msg.c_str());
 

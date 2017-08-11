@@ -79,7 +79,7 @@ int DistanceHeuristic(Tile* curr, Tile* dest) {
     int diffY = a.y - b.y;
     diffX *= diffX;
     diffY *= diffY;
-    return sqrt(diffX + diffY);
+    return static_cast<int>(sqrt(diffX + diffY));
 }
 
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list) {

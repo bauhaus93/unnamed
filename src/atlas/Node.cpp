@@ -78,18 +78,18 @@ std::shared_ptr<Element> Node::AddElement(const Size& size, sdl::Sprite& atlasSp
         if (!HasSubTree()) {
             ExpandTree();
             DEBUG("Expanded tree");
-            auto element = subTree[0]->AddElement(size, atlasSprite);
+            auto addedElement = subTree[0]->AddElement(size, atlasSprite);
             RecalculateSubSpace();
-            return element;
+            return addedElement;
         }
         else {
             for(int i = 0; i < 4; i++) {
                 Size maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
                 if (size.x <= maxSize.x && size.y <= maxSize.y) {
-                    std::shared_ptr<Element> element = subTree[i]->AddElement(size, atlasSprite);
+                    std::shared_ptr<Element> addedElement = subTree[i]->AddElement(size, atlasSprite);
                     RecalculateSubSpace();
-                    return element;
+                    return addedElement;
                 }
             }
         }

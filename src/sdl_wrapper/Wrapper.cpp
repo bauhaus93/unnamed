@@ -123,54 +123,82 @@ void Wrapper::SetWindowTitle(const std::string& title){
 
 void Wrapper::DrawLine(const Point& start, const Point& stop, const Color& color) {
     if (lineRGBA(   renderer,
-                    start.x, start.y,
-                    stop.x, stop.y,
-                    color.r, color.g, color.b, color.a) < 0) {
+                    static_cast<int16_t>(start.x),
+					static_cast<int16_t>(start.y),
+					static_cast<int16_t>(stop.x),
+					static_cast<int16_t>(stop.y),
+                    color.r,
+					color.g,
+					color.b,
+					color.a) < 0) {
         throw SDLException("lineRGBA");
     }
 }
 
 void Wrapper::DrawRect(const Rect& rect, const Color& color) {
     if (rectangleRGBA(  renderer,
-                        rect.x, rect.y,
-                        rect.x + rect.w, rect.y + rect.h,
-                        color.r, color.g, color.b, color.a) < 0) {
+						static_cast<int16_t>(rect.x),
+						static_cast<int16_t>(rect.y),
+						static_cast<int16_t>(rect.x + rect.w),
+						static_cast<int16_t>(rect.y + rect.h),
+                        color.r,
+						color.g,
+						color.b,
+						color.a) < 0) {
         throw SDLException("rectangleRGBA");
     }
 }
 
 void Wrapper::DrawFillRect(const Rect& rect, const Color& color) {
     if (boxRGBA(    renderer,
-                    rect.x, rect.y,
-                    rect.x + rect.w, rect.y + rect.h,
-                    color.r, color.g, color.b, color.a) < 0) {
+					static_cast<int16_t>(rect.x),
+					static_cast<int16_t>(rect.y),
+					static_cast<int16_t>(rect.x + rect.w),
+					static_cast<int16_t>(rect.y + rect.h),
+					color.r,
+					color.g,
+					color.b,
+					color.a) < 0){
         throw SDLException("boxRGBA");
     }
 }
 
 void Wrapper::DrawRoundedFillRect(const Rect& rect, int radius, const Color& color) {
     if (roundedBoxRGBA(     renderer,
-                            rect.x, rect.y,
-                            rect.x + rect.w, rect.y + rect.h,
-                            radius,
-                            color.r, color.g, color.b, color.a) < 0) {
+							static_cast<int16_t>(rect.x),
+							static_cast<int16_t>(rect.y),
+							static_cast<int16_t>(rect.x + rect.w),
+							static_cast<int16_t>(rect.y + rect.h),
+							static_cast<int16_t>(radius),
+							color.r,
+							color.g,
+							color.b,
+							color.a) < 0){
         throw SDLException("roundedBoxRGBA");
     }
 }
 
 void Wrapper::DrawPoint(const Point& point, const Color& color) {
     if (pixelRGBA(  renderer,
-                    point.x, point.y,
-                    color.r, color.g, color.b, color.a) < 0) {
+					static_cast<int16_t>(point.x),
+					static_cast<int16_t>(point.y),
+                    color.r,
+					color.g,
+					color.b,
+					color.a) < 0) {
         throw SDLException("pixelRGBA");
     }
 }
 
 void Wrapper::DrawFilledCircle(const Point& origin, int radius, const Color& color) {
     if (filledCircleRGBA(   renderer,
-                            origin.x, origin.y,
-                            radius,
-                            color.r, color.g, color.b, color.a)) {
+							static_cast<int16_t>(origin.x),
+							static_cast<int16_t>(origin.y),
+							static_cast<int16_t>(radius),
+                            color.r,
+							color.g,
+							color.b,
+							color.a) < 0) {
         throw SDLException("filledCircleRGBA");
     }
 }

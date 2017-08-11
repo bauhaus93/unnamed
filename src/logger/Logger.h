@@ -1,5 +1,7 @@
 #pragma once
 
+#define __STDC_WANT_LIB_EXT1__ 
+
 #include <iostream>
 #include <ctime>
 #include <string>

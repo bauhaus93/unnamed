@@ -2,7 +2,7 @@
 
 namespace unnamed::atlas {
 
-static Size CalculateSize(const Size& exactFit, const Size& maxSize);
+Size CalculateSize(const Size& exactFit, const Size& maxSize);
 
 Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
     size { CalculateSize(exactFit, maxSize) },
@@ -22,8 +22,8 @@ Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize
 
 }
 
-std::shared_ptr<Element> Atlas::AddElement(const Size& size) {
-    return root->AddElement(size, sprite);
+std::shared_ptr<Element> Atlas::AddElement(const Size& elemnentSize) {
+    return root->AddElement(elemnentSize, sprite);
 }
 
 void Atlas::Draw(const Rect& rect) const {

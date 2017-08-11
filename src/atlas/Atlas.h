@@ -24,7 +24,7 @@ class Atlas {
 public:
 
                                     Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
-        std::shared_ptr<Element>    AddElement(const Size& size);
+        std::shared_ptr<Element>    AddElement(const Size& elementSize);
         void                        Draw(const Rect& rect) const;
         void                        SetAsRenderTarget();
 

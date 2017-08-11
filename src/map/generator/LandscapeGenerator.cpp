@@ -76,13 +76,13 @@ std::shared_ptr<atlas::Element> LandscapeGenerator::CreateFloorSprite(const Rect
             uint8_t col = 0xA0;
 
             if (noise < 0.1)
-                col *= 0.8;
+                col = static_cast<uint8_t>(col * 0.8);
             else if (noise < 0.15)
-                col *= 0.85;
+				col = static_cast<uint8_t>(col * 0.85);
             else if (noise < 0.25)
-                col *= 0.9;
+				col = static_cast<uint8_t>(col * 0.9);
             else if (noise < 0.3)
-                col *= 0.95;
+				col = static_cast<uint8_t>(col * 0.95);
             if (noise < 0.3) {
                 sdlWrapper.SetDrawColor(Color{  col,
                                                 col,
@@ -211,7 +211,7 @@ int distance(const Point& a, const Point& b) {
     int diffY = a.y - b.y;
     diffX *= diffX;
     diffY *= diffY;
-    return sqrt(diffX + diffY);
+    return static_cast<int>(sqrt(diffX + diffY));
 }
 
 }
