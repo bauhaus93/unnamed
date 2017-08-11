@@ -5,10 +5,10 @@
 #include "logger/StdLogger.h"
 #include "common/Point.h"
 #include "common/Rect.h"
+#include "pathfinding/FindPath.h"
 #include "Tile.h"
 #include "SimplexNoise.h"
 #include "LandscapeGenerator.h"
-
 
 class Map {
 

@@ -55,7 +55,6 @@ void Game::Render() {
 }
 
 void Game::Update() {
-
 }
 
 void Game::HandleKeyDown(EventKeyDown& event) {

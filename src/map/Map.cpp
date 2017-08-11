@@ -6,8 +6,13 @@ Map::Map(const Size& size_, LandscapeGenerator& landscapeGenerator_):
     root { landscapeGenerator.Generate(Rect{ 0, 0, size.x, size.y }) },
     camera { root } {
 
-    
+    Tile* dest = root;
+    while (dest->GetNeighbour(Direction::EAST) != nullptr)
+        dest = dest->GetNeighbour(Direction::EAST);
+    while (dest->GetNeighbour(Direction::SOUTH) != nullptr)
+        dest = dest->GetNeighbour(Direction::SOUTH);
 
+    FindPath(root, dest);
 
 }
 
