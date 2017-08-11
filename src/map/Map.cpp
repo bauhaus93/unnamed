@@ -2,7 +2,7 @@
 
 namespace unnamed::map {
 
-Map::Map(const Size& size_, LandscapeGenerator& landscapeGenerator_):
+Map::Map(const Size& size_, generator::LandscapeGenerator& landscapeGenerator_):
     size { size_ },
     landscapeGenerator { landscapeGenerator_ },
     root { landscapeGenerator.Generate(Rect{ 0, 0, size.x, size.y }) },

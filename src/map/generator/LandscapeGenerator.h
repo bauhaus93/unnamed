@@ -6,9 +6,9 @@
 #include "common/Rect.h"
 #include "atlas/Atlas.h"
 #include "SimplexNoise.h"
-#include "Tile.h"
+#include "map/Tile.h"
 
-namespace unnamed::map {
+namespace unnamed::map::generator {
 
 class LandscapeGenerator {
 

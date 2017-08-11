@@ -9,17 +9,17 @@
 #include "atlas/Atlas.h"
 #include "atlas/NoAtlasSpaceException.h"
 #include "map/Map.h"
-#include "map/LandscapeGenerator.h"
+#include "map/generator/LandscapeGenerator.h"
 
 namespace unnamed {
 
 class Game {
 
-    sdl::Wrapper                sdlWrapper;
-    rng::Rng                    rng;
-    atlas::Atlas                atlas;
-    map::LandscapeGenerator     landscapeGenerator;
-    map::Map                    map;
+    sdl::Wrapper                        sdlWrapper;
+    rng::Rng                            rng;
+    atlas::Atlas                        atlas;
+    map::generator::LandscapeGenerator  landscapeGenerator;
+    map::Map                            map;
 
 
     void            Render();

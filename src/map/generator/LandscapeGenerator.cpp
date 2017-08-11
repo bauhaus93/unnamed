@@ -1,6 +1,6 @@
 #include "LandscapeGenerator.h"
 
-namespace unnamed::map {
+namespace unnamed::map::generator {
 
 int distance(const Point& a, const Point& b);
 

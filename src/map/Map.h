@@ -7,22 +7,21 @@
 #include "common/Rect.h"
 #include "pathfinding/FindPath.h"
 #include "Tile.h"
-#include "SimplexNoise.h"
-#include "LandscapeGenerator.h"
+#include "generator/LandscapeGenerator.h"
 
 namespace unnamed::map {
 
 class Map {
 
-    Size                size;
-    LandscapeGenerator& landscapeGenerator;
-    Tile*               root;
-    Tile*               camera;
+    Size                            size;
+    generator::LandscapeGenerator&  landscapeGenerator;
+    Tile*                           root;
+    Tile*                           camera;
 
 
 public:
 
-                        Map(const Size& size_, LandscapeGenerator& landscapeGenerator_);
+                        Map(const Size& size_, generator::LandscapeGenerator& landscapeGenerator_);
                         ~Map();
     void                Draw(const Rect& destRect);
     void                MoveCamera(Direction dir);
