@@ -63,7 +63,7 @@ Point Unit::GetPos() const {
 }
 
 void Unit::Draw(const Point& camera, const Point& offset) {
-    sprite->Draw(Point{ offset.x + position.x - camera.x, offset.y + position.y - camera.y });
+    sprite->Draw(Point{ offset.x + position.x - TILE_SIZE / 2 - camera.x, offset.y + position.y - TILE_SIZE / 2 - camera.y });
 }
 
 }

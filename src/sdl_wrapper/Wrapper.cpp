@@ -215,7 +215,7 @@ void Wrapper::StartTimers() {
         throw SDLException("SDL_RegisterEvents");
     }
 
-    timerUpdate = SDL_AddTimer(200, UpdateCallback, (void*)&eventTypeUpdate);
+    timerUpdate = SDL_AddTimer(33, UpdateCallback, (void*)&eventTypeUpdate);
     if (timerUpdate == 0) {
         throw SDLException("SDL_AddTimer");
     }
