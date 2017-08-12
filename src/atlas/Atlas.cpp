@@ -2,9 +2,22 @@
 
 namespace unnamed::atlas {
 
-Size CalculateSize(const Size& exactFit, const Size& maxSize);
+Size<int> CalculateSize(const Size<int>& exactFit, const Size<int>& maxSize) {
+    if (exactFit.x > maxSize.x || exactFit.y > maxSize.y) {
+        throw exception::GameException("CalculateSize<int>", "Max atlas size must be at least as big as demanded exact fit");
+    }
 
-Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize):
+    Size<int> currSize { exactFit.x, exactFit.y };
+
+    while (currSize.x < maxSize.x && currSize.y < maxSize.y) {
+        currSize.x *= 2;
+        currSize.y *= 2;
+    }
+    return currSize;
+}
+
+
+Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size<int>& exactFit, const Size<int>& maxSize):
     size { CalculateSize(exactFit, maxSize) },
     sprite { sdlWrapper, size },
     root { std::make_unique<Node>(Rect{ 0, 0, size.x, size.y })} {
@@ -22,8 +35,8 @@ Atlas::Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize
 
 }
 
-std::shared_ptr<Element> Atlas::AddElement(const Size& elemnentSize) {
-    return root->AddElement(elemnentSize, sprite);
+std::shared_ptr<Element> Atlas::AddElement(const Size<int>& elementSize) {
+    return root->AddElement(elementSize, sprite);
 }
 
 void Atlas::Draw(const Rect& rect) const {
@@ -34,18 +47,6 @@ void Atlas::SetAsRenderTarget() {
     sprite.SetAsRenderTarget();
 }
 
-Size CalculateSize(const Size& exactFit, const Size& maxSize) {
-    if (exactFit.x > maxSize.x || exactFit.y > maxSize.y) {
-        throw exception::GameException("CalculateSize", "Max atlas size must be at least as big as demanded exact fit");
-    }
 
-    Size currSize { exactFit.x, exactFit.y };
-
-    while (currSize.x < maxSize.x && currSize.y < maxSize.y) {
-        currSize.x *= 2;
-        currSize.y *= 2;
-    }
-    return currSize;
-}
 
 }

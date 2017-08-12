@@ -4,6 +4,7 @@
 
 #include "sdl_wrapper/Wrapper.h"
 #include "common/Rect.h"
+#include "common/Point.h"
 #include "atlas/Atlas.h"
 #include "SimplexNoise.h"
 #include "map/tile/Tile.h"

@@ -10,7 +10,7 @@ UnitManager::UnitManager(atlas::Atlas& atlas_, sdl::Wrapper& sdlWrapper_):
     sprites {},
     currIter { units.end() } {
 
-    Size unitSize { 50, 50 };
+    Size<int> unitSize { 50, 50 };
     auto basicSprite = atlas.AddElement(unitSize);
 
     basicSprite->SetAsRenderTarget();

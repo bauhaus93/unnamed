@@ -36,7 +36,9 @@ public:
         void            SetNeighbour(Direction dir, Tile* tile);
 
         Tile*           GetNeighbour(Direction dir) const;
+        Tile*           GetNeighbourByPoint(const Point& p) const;
         Point           GetPos() const;
+        Rect            GetRect() const;
         void            Draw(const Point& camera, const Point& offset);
         void            AddRock(std::unique_ptr<Rock> rock_);
         bool            HasRock() const;

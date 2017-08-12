@@ -2,7 +2,7 @@
 
 namespace unnamed::sdl {
 
-Sprite::Sprite(Wrapper& sdlWrapper_, const Size& size):
+Sprite::Sprite(Wrapper& sdlWrapper_, const Size<int>& size):
     sdlWrapper { sdlWrapper_ },
     texture { nullptr } {
 

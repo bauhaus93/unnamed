@@ -5,7 +5,7 @@ namespace unnamed::sdl {
 static Uint32 RenderCallback(Uint32 delay, void* params);
 static Uint32 UpdateCallback(Uint32 delay, void* params);
 
-Wrapper::Wrapper(const std::string& windowTitle, const Size& windowSize):
+Wrapper::Wrapper(const std::string& windowTitle, const Size<int>& windowSize):
     window { nullptr },
     renderer { nullptr },
     timerRender { 0 },

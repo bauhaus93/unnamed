@@ -2,9 +2,10 @@
 
 namespace unnamed {
 
+template<typename T>
 struct Size {
-    int x;
-    int y;
+    T x;
+    T y;
 };
 
 }

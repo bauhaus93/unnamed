@@ -12,7 +12,7 @@ Node::Node(const Rect& rect_):
 
 
 void Node::ExpandTree() {
-    Size subSize { rect.w / 2, rect.h / 2 };
+    Size<int> subSize { rect.w / 2, rect.h / 2 };
 
     if (subSize.x <= 0 || subSize.y <= 0)
         return;
@@ -37,11 +37,11 @@ bool Node::IsLeaf() const {
     return !HasElement() && !HasSubTree();
 }
 
-bool Node::FitsInMe(const Size& size) const {
+bool Node::FitsInMe(const Size<int>& size) const {
     return size.x <= rect.w && size.y <= rect.h;
 }
 
-bool Node::FitsInSubTree(const Size& size) const {
+bool Node::FitsInSubTree(const Size<int>& size) const {
     return size.x <= rect.w / 2 && size.y <= rect.h / 2;
 }
 
@@ -56,14 +56,14 @@ bool Node::IsSubTreeEmpty() const {
     return !HasElement();
 }
 
-Size Node::GetSubSpace() const {
+Size<int> Node::GetSubSpace() const {
     return subSpace;
 }
 
 void Node::RecalculateSubSpace() {
-    Size maxSize = subTree[0]->GetSubSpace();
+    Size<int> maxSize = subTree[0]->GetSubSpace();
     for(int i = 1; i < 4; i++) {
-        Size currSize = subTree[i]->GetSubSpace();
+        Size<int> currSize = subTree[i]->GetSubSpace();
         if (std::min(currSize.x, currSize.y) > std::min(maxSize.x, maxSize.y)) {
             maxSize = currSize;
         }
@@ -71,7 +71,7 @@ void Node::RecalculateSubSpace() {
     subSpace = maxSize;
 }
 
-std::shared_ptr<Element> Node::AddElement(const Size& size, sdl::Sprite& atlasSprite) {
+std::shared_ptr<Element> Node::AddElement(const Size<int>& size, sdl::Sprite& atlasSprite) {
     DEBUG(StringFormat("Node for (%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h));
 
     if (FitsInSubTree(size)) {
@@ -84,7 +84,7 @@ std::shared_ptr<Element> Node::AddElement(const Size& size, sdl::Sprite& atlasSp
         }
         else {
             for(int i = 0; i < 4; i++) {
-                Size maxSize = subTree[i]->GetSubSpace();
+                Size<int> maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
                 if (size.x <= maxSize.x && size.y <= maxSize.y) {
                     std::shared_ptr<Element> addedElement = subTree[i]->AddElement(size, atlasSprite);
@@ -102,7 +102,7 @@ std::shared_ptr<Element> Node::AddElement(const Size& size, sdl::Sprite& atlasSp
                                                                             size.y,
                                                                             rect.w,
                                                                             rect.h));
-        subSpace = Size{ 0, 0 };
+        subSpace = Size<int>{ 0, 0 };
         return element;
     }
     throw NoAtlasSpaceException(size);

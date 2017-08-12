@@ -17,7 +17,7 @@ class Sprite {
 
 public:
 
-                        Sprite(Wrapper& sdlWrapper_, const Size& size);
+                        Sprite(Wrapper& sdlWrapper_, const Size<int>& size);
 
 
     void                SetAsRenderTarget();

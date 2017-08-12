@@ -32,7 +32,7 @@ class Game {
 
 public:
 
-    explicit        Game(const Size& windowSize);
+    explicit        Game(const Size<int>& windowSize);
     void            Loop();
 };
 

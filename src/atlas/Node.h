@@ -17,7 +17,7 @@ class Node {
     std::unique_ptr<Node>           subTree[4];
     std::shared_ptr<Element>        element;
     Rect                            rect;
-    Size                            subSpace;
+    Size<int>                            subSpace;
 
 public:
     explicit                    Node(const Rect& Rect_);
@@ -25,12 +25,12 @@ public:
     bool                        HasElement() const;
     bool                        HasSubTree() const;
     bool                        IsLeaf() const;
-    bool                        FitsInMe(const Size& size) const;
-    bool                        FitsInSubTree(const Size& size) const;
-    Size                        GetSubSpace() const;
+    bool                        FitsInMe(const Size<int>& size) const;
+    bool                        FitsInSubTree(const Size<int>& size) const;
+    Size<int>                        GetSubSpace() const;
     void                        RecalculateSubSpace();
     bool                        IsSubTreeEmpty() const;
-    std::shared_ptr<Element>    AddElement(const Size& size, sdl::Sprite& atlasSprite);
+    std::shared_ptr<Element>    AddElement(const Size<int>& size, sdl::Sprite& atlasSprite);
 
 };
 

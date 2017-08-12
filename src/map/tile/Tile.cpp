@@ -33,8 +33,22 @@ Tile* Tile::GetNeighbour(Direction dir) const {
     return neighbour[static_cast<int>(dir)];
 }
 
+Tile* Tile::GetNeighbourByPoint(const Point& p) const {
+    for (int i = 0; i < 4; i++) {
+        Tile* currNB = neighbour[i];
+        if (currNB != nullptr && PointInRectangle(p, currNB->GetRect())) {
+            return currNB;
+        }
+    }
+    return nullptr;
+}
+
 Point Tile::GetPos() const {
     return Point{ rect.x, rect.y };
+}
+
+Rect Tile::GetRect() const {
+    return rect;
 }
 
 void Tile::Draw(const Point& camera, const Point& offset) {

@@ -15,7 +15,7 @@ namespace unnamed::atlas {
 
 class Atlas {
 
-    Size                    size;
+    Size<int>               size;
     sdl::Sprite             sprite;
     std::unique_ptr<Node>   root;
 
@@ -23,8 +23,8 @@ class Atlas {
 
 public:
 
-                                    Atlas(sdl::Wrapper& sdlWrapper, const Size& exactFit, const Size& maxSize);
-        std::shared_ptr<Element>    AddElement(const Size& elementSize);
+                                    Atlas(sdl::Wrapper& sdlWrapper, const Size<int>& exactFit, const Size<int>& maxSize);
+        std::shared_ptr<Element>    AddElement(const Size<int>& elementSize);
         void                        Draw(const Rect& rect) const;
         void                        SetAsRenderTarget();
 

@@ -12,7 +12,7 @@ namespace unnamed::atlas {
 class NoAtlasSpaceException : public exception::GameException {
 
 public:
-    explicit NoAtlasSpaceException(const Size& size);
+    explicit NoAtlasSpaceException(const Size<int>& size);
 };
 
 }

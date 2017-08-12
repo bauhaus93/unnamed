@@ -2,12 +2,12 @@
 
 namespace unnamed {
 
-Game::Game(const Size& windowSize):
+Game::Game(const Size<int>& windowSize):
     sdlWrapper { "unnamed", windowSize },
     rng {},
-    atlas { sdlWrapper, Size{ 50, 50 }, Size{ 4000, 4000 } },
+    atlas { sdlWrapper, Size<int>{ 50, 50 }, Size<int>{ 4000, 4000 } },
     landscapeGenerator { sdlWrapper, atlas, rng.Random() },
-    map { Size{ 40, 40 }, landscapeGenerator },
+    map { Size<int>{ 40, 40 }, landscapeGenerator },
     unitManager { atlas, sdlWrapper } {
 
 
@@ -76,7 +76,7 @@ void Game::HandleKeyDown(event::EventKeyDown& event) {
 
 void Game::HandleUnits() {
 
-    while (unitManager.GetUnitCount() < 10) {
+    while (unitManager.GetUnitCount() < 1) {
         unitManager.CreateTestUnit(map.GetRandomTraversableTile(rng));
     }
 

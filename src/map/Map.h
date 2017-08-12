@@ -13,7 +13,7 @@ namespace unnamed::map {
 
 class Map {
 
-    Size                            size;
+    Size<int>                            size;
     LandscapeGenerator&             landscapeGenerator;
     Tile*                           root;
     Tile*                           camera;
@@ -21,7 +21,7 @@ class Map {
 
 public:
 
-                        Map(const Size& size_, LandscapeGenerator& landscapeGenerator_);
+                        Map(const Size<int>& size_, LandscapeGenerator& landscapeGenerator_);
                         ~Map();
     void                Draw(const Rect& destRect);
     void                MoveCamera(Direction dir);

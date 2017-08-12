@@ -2,8 +2,6 @@
 
 namespace unnamed::map {
 
-int distance(const Point& a, const Point& b);
-
 LandscapeGenerator::LandscapeGenerator(sdl::Wrapper& sdlWrapper_, atlas::Atlas& atlas_, unsigned int seed):
     sdlWrapper { sdlWrapper_ },
     atlas { atlas_ },
@@ -63,7 +61,7 @@ Tile* LandscapeGenerator::CreateTile(const Rect& tileRect) {
 }
 
 std::shared_ptr<atlas::Element> LandscapeGenerator::CreateFloorSprite(const Rect& rect) {
-    std::shared_ptr<atlas::Element> element = atlas.AddElement(Size{ rect.w, rect.h });
+    std::shared_ptr<atlas::Element> element = atlas.AddElement(Size<int>{ rect.w, rect.h });
 
     atlas.SetAsRenderTarget();
     Rect spriteRect = element->GetRect();
@@ -101,7 +99,7 @@ std::shared_ptr<atlas::Element> LandscapeGenerator::CreateFloorSprite(const Rect
 
 
 std::shared_ptr<atlas::Element> LandscapeGenerator::CreateRockSprite(const Rect& rect, uint8_t rockMask) {
-    std::shared_ptr<atlas::Element> element = atlas.AddElement(Size{ rect.w, rect.h });
+    std::shared_ptr<atlas::Element> element = atlas.AddElement(Size<int>{ rect.w, rect.h });
     Rect spriteRect = element->GetRect();
     const int CORNER_RADIUS = 14;
 
@@ -158,13 +156,13 @@ std::shared_ptr<atlas::Element> LandscapeGenerator::CreateRockSprite(const Rect&
             if (noise < 0.4) {
                 Point pos { spriteRect.x + x, spriteRect.y + y };
 
-                if (distance(pos, Point{ spriteRect.x + spriteRect.w / 2, spriteRect.y + spriteRect.h / 2 }) <= TILE_SIZE / 2)
+                if (Distance(pos, Point{ spriteRect.x + spriteRect.w / 2, spriteRect.y + spriteRect.h / 2 }) <= TILE_SIZE / 2)
                     sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
                 else {
-                    int distNE = distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
-                    int distSE = distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
-                    int distSW = distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
-                    int distNW = distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
+                    int distNE = Distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
+                    int distSE = Distance(pos, Point{ spriteRect.x + spriteRect.w - CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
+                    int distSW = Distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + spriteRect.h - CORNER_RADIUS });
+                    int distNW = Distance(pos, Point{ spriteRect.x + CORNER_RADIUS, spriteRect.y + CORNER_RADIUS });
 
                     if (distNE <= CORNER_RADIUS || ((rockMask & (1 | 2)) && distNE <= 19))
                         sdlWrapper.DrawPoint(Point{ spriteRect.x + x, spriteRect.y + y }, Color{ col, col, col, 0xFF });
@@ -206,12 +204,6 @@ uint8_t LandscapeGenerator::GetNeighbourRockMask(const Rect& tileRect) {
     return mask;
 }
 
-int distance(const Point& a, const Point& b) {
-    int diffX = a.x - b.x;
-    int diffY = a.y - b.y;
-    diffX *= diffX;
-    diffY *= diffY;
-    return static_cast<int>(sqrt(diffX + diffY));
-}
+
 
 }

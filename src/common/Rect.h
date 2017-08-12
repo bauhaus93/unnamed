@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Point.h"
+
 namespace unnamed {
 
 struct Rect {
@@ -8,5 +10,7 @@ struct Rect {
     int w;
     int h;
 };
+
+bool PointInRectangle(const Point& p, const Rect& rect);
 
 }

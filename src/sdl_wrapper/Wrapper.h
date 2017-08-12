@@ -31,7 +31,7 @@ class Wrapper {
 
 public:
 
-                                Wrapper(const std::string& windowTitle, const Size& windowSize);
+                                Wrapper(const std::string& windowTitle, const Size<int>& windowSize);
                                 ~Wrapper();
 
         void                    ClearScene();

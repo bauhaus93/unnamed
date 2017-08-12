@@ -4,18 +4,23 @@
 
 #include "map/tile/Tile.h"
 #include "PathNode.h"
+#include "Waypoint.h"
 
 namespace unnamed::map {
 
 class Path {
 
-    std::vector<Tile*>  waypoints;
+    std::vector<Waypoint>  waypoints;
+
+
+    Waypoint&           GetCurrentWaypoint(const Point& pos);
 
 public:
 
     explicit            Path(PathNode* dest);
 
-    map::Tile*          GetNextTile();
+    Size<double>        GetMoveOffset(const Point& pos);
+    bool                ReachedDestination() const;
 
 };
 

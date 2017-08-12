@@ -15,8 +15,10 @@ class Unit {
 
     map::Tile*                      currTile;
     Point                           position;
+    int                             speed;
     std::shared_ptr<atlas::Element> sprite;
     std::unique_ptr<map::Path>      currDest;
+
 
     void                            SetPos(const Point& newPos);
 
@@ -27,9 +29,11 @@ public:
     bool                HasDestination() const;
     void                SetDestination(std::unique_ptr<map::Path> destination);
     void                WalkDestination();
+    void                UpdateTile();
 
     map::Tile*          GetTile() const;
     Point               GetPos() const;
+    void                Move(const Size<double>& normalizedOffset);
 
     void                Draw(const Point& camera, const Point& offset);
 
