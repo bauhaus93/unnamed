@@ -19,11 +19,9 @@ Path::Path(PathNode* dest) {
             Point endPos = waypoints.back().GetEnd();
 
             if (curr->GetPredecessor() == nullptr) {
-                currTile->MarkRed();
                 waypoints.back().SetStart(currPos);
             }
             else if (currPos.x != endPos.x && currPos.y != endPos.y) {
-                prevTile->MarkRed();
                 waypoints.back().SetStart(prevTile->GetPos());
                 waypoints.emplace_back();
                 waypoints.back().SetEnd(prevTile->GetPos());
@@ -49,7 +47,7 @@ Size<double> Path::GetMoveOffset(const Point& pos) {
 }
 
 Waypoint& Path::GetCurrentWaypoint(const Point& pos) {
-    INFO(StringFormat("Distance to wp: %d", waypoints.back().GetDistance(pos)));
+    //DEBUG(StringFormat("Distance to wp: %d", waypoints.back().GetDistance(pos)));
     if(waypoints.back().GetDistance(pos) < 5) {
         waypoints.pop_back();
     }

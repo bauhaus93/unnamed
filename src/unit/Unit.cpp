@@ -30,7 +30,6 @@ void Unit::WalkDestination() {
         }
         else {
             Size<double> offset = currDest->GetMoveOffset(GetPos());
-            INFO(StringFormat("MoveOffset: (%.2f/%.2f)", offset.x, offset.y));
             Move(offset);
             UpdateTile();
         }
@@ -39,9 +38,18 @@ void Unit::WalkDestination() {
 
 void Unit::UpdateTile() {
     if (!PointInRectangle(position, currTile->GetRect())) {
-        currTile = currTile->GetNeighbourByPoint(position);
-        if (currTile == nullptr)
-            throw exception::GameException("Unit::UpdateTile", "New unit tile is not neighbour of old tile");
+        map::Tile* newTile = currTile->GetNeighbourByPoint(position);
+        if (newTile == nullptr) {
+            ERROR(StringFormat("Could not retrieve new tile of unit by neighbour of current tile: unit pos: (%d, %d), old tile pos: (%d, %d)",
+                GetPos().x,
+                GetPos().y,
+                currTile->GetPos().x,
+                currTile->GetPos().y));
+            currDest = nullptr;
+        }
+        else {
+            currTile = newTile;
+        }
     }
 }
 

@@ -76,7 +76,7 @@ void Game::HandleKeyDown(event::EventKeyDown& event) {
 
 void Game::HandleUnits() {
 
-    while (unitManager.GetUnitCount() < 1) {
+    while (unitManager.GetUnitCount() < 20) {
         unitManager.CreateTestUnit(map.GetRandomTraversableTile(rng));
     }
 

@@ -30,14 +30,48 @@ void Tile::SetNeighbour(Direction dir, Tile* tile) {
 }
 
 Tile* Tile::GetNeighbour(Direction dir) const {
-    return neighbour[static_cast<int>(dir)];
+    switch(dir) {
+    case Direction::NORTH: return neighbour[0];
+    case Direction::EAST:  return neighbour[1];
+    case Direction::SOUTH: return neighbour[2];
+    case Direction::WEST:  return neighbour[3];
+    case Direction::NORTH_EAST:
+        if (neighbour[0] != nullptr)
+            return neighbour[0]->GetNeighbour(Direction::EAST);
+        else if (neighbour[1] != nullptr)
+            return neighbour[1]->GetNeighbour(Direction::NORTH);
+        return nullptr;
+    case Direction::SOUTH_EAST:
+        if (neighbour[2] != nullptr)
+            return neighbour[2]->GetNeighbour(Direction::EAST);
+        else if (neighbour[1] != nullptr)
+            return neighbour[1]->GetNeighbour(Direction::SOUTH);
+        return nullptr;
+    case Direction::SOUTH_WEST:
+        if (neighbour[2] != nullptr)
+            return neighbour[2]->GetNeighbour(Direction::WEST);
+        else if (neighbour[3] != nullptr)
+            return neighbour[3]->GetNeighbour(Direction::SOUTH);
+        return nullptr;
+    case Direction::NORTH_WEST:
+        if (neighbour[0] != nullptr)
+            return neighbour[0]->GetNeighbour(Direction::WEST);
+        else if (neighbour[3] != nullptr)
+            return neighbour[3]->GetNeighbour(Direction::NORTH);
+        return nullptr;
+    default:
+        ERROR("Unknown Direction case in Tile::GetNeighbour");
+        return nullptr;
+    }
 }
 
 Tile* Tile::GetNeighbourByPoint(const Point& p) const {
-    for (int i = 0; i < 4; i++) {
-        Tile* currNB = neighbour[i];
-        if (currNB != nullptr && PointInRectangle(p, currNB->GetRect())) {
-            return currNB;
+    for (int i = 0; i < 8; i++) {
+        Tile* currNB = GetNeighbour(static_cast<Direction>(i));
+        if (currNB != nullptr) {
+            if (PointInRectangle(p, currNB->GetRect())) {
+                return currNB;
+            }
         }
     }
     return nullptr;
