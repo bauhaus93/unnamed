@@ -6,7 +6,8 @@ namespace unnamed::map {
 
 Size<double> CalculateMoveOffset(const Point& src, const Point& dest) {
     if (src.x != dest.x || src.y != dest.y) {
-        Size<double> offset { dest.x - src.x, dest.y - src.y };
+        Size<double> offset { static_cast<double>(dest.x - src.x),
+                              static_cast<double>(dest.y - src.y) };
         double len = sqrt(offset.x * offset.x + offset.y * offset.y);
         offset.x /= len;
         offset.y /= len;
