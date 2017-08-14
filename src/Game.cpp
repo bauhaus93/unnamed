@@ -5,7 +5,7 @@ namespace unnamed {
 Game::Game(const Size<int>& windowSize):
     sdlWrapper { "unnamed", windowSize },
     rng {},
-    atlas { sdlWrapper, Size<int>{ 50, 50 }, Size<int>{ 4000, 4000 } },
+    atlas { sdlWrapper, Size<int>{ 51, 51 }, Size<int>{ 4000, 4000 } },
     landscapeGenerator { sdlWrapper, atlas, rng.Random() },
     map { Size<int>{ 40, 40 }, landscapeGenerator },
     unitManager { atlas, sdlWrapper } {

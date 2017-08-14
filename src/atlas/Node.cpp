@@ -38,11 +38,11 @@ bool Node::IsLeaf() const {
 }
 
 bool Node::FitsInMe(const Size<int>& size) const {
-    return size.x <= rect.w && size.y <= rect.h;
+    return size.x < rect.w && size.y < rect.h;
 }
 
 bool Node::FitsInSubTree(const Size<int>& size) const {
-    return size.x <= rect.w / 2 && size.y <= rect.h / 2;
+    return size.x < rect.w / 2 && size.y < rect.h / 2;
 }
 
 bool Node::IsSubTreeEmpty() const {
@@ -86,7 +86,7 @@ std::shared_ptr<Element> Node::AddElement(const Size<int>& size, sdl::Sprite& at
             for(int i = 0; i < 4; i++) {
                 Size<int> maxSize = subTree[i]->GetSubSpace();
                 DEBUG(StringFormat("MaxSubtreeSpace: %d/%d, index: %d, leaf? %d", maxSize.x, maxSize.y, i, subTree[i]->IsLeaf()));
-                if (size.x <= maxSize.x && size.y <= maxSize.y) {
+                if (size.x < maxSize.x && size.y < maxSize.y) {
                     std::shared_ptr<Element> addedElement = subTree[i]->AddElement(size, atlasSprite);
                     RecalculateSubSpace();
                     return addedElement;

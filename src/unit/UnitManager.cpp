@@ -14,8 +14,11 @@ UnitManager::UnitManager(atlas::Atlas& atlas_, sdl::Wrapper& sdlWrapper_):
     auto basicSprite = atlas.AddElement(unitSize);
 
     basicSprite->SetAsRenderTarget();
+    sdlWrapper.UseNoBlending();
+    sdlWrapper.DrawFillRect(basicSprite->GetRect(), Color { 0xFF, 0, 0, 0 });
+    sdlWrapper.UseAlphaBlending();
     Rect spriteRect = basicSprite->GetRect();
-    sdlWrapper.DrawFilledCircle(Point { spriteRect.x + 25, spriteRect.y + 24 }, 24, Color { 0xFF, 0, 0, 0xFF });
+    sdlWrapper.DrawFilledCircle(Point { spriteRect.x + 25, spriteRect.y + 25 }, 24, Color { 0xFF, 0, 0, 0xFF });
     sdlWrapper.ClearRenderTarget();
     sprites.push_back(basicSprite);
 
