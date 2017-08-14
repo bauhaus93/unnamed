@@ -12,6 +12,7 @@
 #include "map/generator/LandscapeGenerator.h"
 #include "unit/UnitManager.h"
 #include "map/pathfinding/FindPath.h"
+#include "frequency_handler/FrequencyHandler.h"
 
 namespace unnamed {
 
@@ -23,6 +24,8 @@ class Game {
     map::LandscapeGenerator             landscapeGenerator;
     map::Map                            map;
     unit::UnitManager                   unitManager;
+    freq::FrequencyHandler              fpsHandler;
+    freq::FrequencyHandler              upsHandler;
 
 
     void            Render();

@@ -3,4 +3,5 @@ add_sources(
   Rng.cpp
   Point.cpp
   Rect.cpp
+  Time.cpp
 )

@@ -2,16 +2,33 @@
 
 namespace unnamed::sdl {
 
-static Uint32 RenderCallback(Uint32 delay, void* params);
-static Uint32 UpdateCallback(Uint32 delay, void* params);
+Uint32 RenderCallback(Uint32 interval, void* param) {
+    SDL_Event event;
+    CallbackData* data = static_cast<CallbackData*>(param);
+
+    memset(&event, 0, sizeof(SDL_Event));
+    event.type = data->eventType;
+    SDL_PushEvent(&event);
+
+    return static_cast<Uint32>(data->handler.GetDelay());
+}
+
+Uint32 UpdateCallback(Uint32 interval, void* param) {
+    SDL_Event event;
+    CallbackData* data = static_cast<CallbackData*>(param);
+
+    memset(&event, 0, sizeof(SDL_Event));
+    event.type = data->eventType;
+    SDL_PushEvent(&event);
+
+    return static_cast<Uint32>(data->handler.GetDelay());
+}
 
 Wrapper::Wrapper(const std::string& windowTitle, const Size<int>& windowSize):
     window { nullptr },
     renderer { nullptr },
-    timerRender { 0 },
-    timerUpdate { 0 },
-    eventTypeRender { (Uint32)-1 },
-    eventTypeUpdate { (Uint32)-1 } {
+    dataRender { nullptr },
+    dataUpdate { nullptr } {
 
     INFO("Initializing SDL2...");
 
@@ -203,41 +220,44 @@ void Wrapper::DrawFilledCircle(const Point& origin, int radius, const Color& col
     }
 }
 
-void Wrapper::StartTimers() {
+void Wrapper::StartTimers(const freq::FrequencyHandler& fpsHandler, const freq::FrequencyHandler& upsHandler) {
 
-    eventTypeUpdate = SDL_RegisterEvents(2);
-    if (eventTypeUpdate == (Uint32)-1) {
+    dataRender = std::make_unique<CallbackData>(-1, fpsHandler, 0);
+    dataUpdate = std::make_unique<CallbackData>(-1, upsHandler, 0);
+
+    dataUpdate->eventType = SDL_RegisterEvents(2);
+    if (dataUpdate->eventType == (Uint32)-1) {
         throw SDLException("SDL_RegisterEvents");
     }
 
-    eventTypeRender = eventTypeUpdate++;
-    if (eventTypeRender == (Uint32)-1) {
+    dataRender->eventType = dataUpdate->eventType++;
+    if (dataRender->eventType == (Uint32)-1) {
         throw SDLException("SDL_RegisterEvents");
     }
 
-    timerUpdate = SDL_AddTimer(33, UpdateCallback, (void*)&eventTypeUpdate);
-    if (timerUpdate == 0) {
+    dataUpdate->timerId = SDL_AddTimer(33, UpdateCallback, (void*)&*dataUpdate);
+    if (dataUpdate->timerId == 0) {
         throw SDLException("SDL_AddTimer");
     }
     INFO("Started update timer");
 
-    timerRender = SDL_AddTimer(50, RenderCallback, (void*)&eventTypeRender);
-    if (timerRender == 0) {
+    dataRender->timerId = SDL_AddTimer(50, RenderCallback, (void*)&*dataRender);
+    if (dataRender->timerId == 0) {
         throw SDLException("SDL_AddTimer");
     }
     INFO("Started render timer");
 }
 
 void Wrapper::StopTimers() {
-    if (timerRender != 0) {
-        SDL_RemoveTimer(timerRender);
-        timerRender = 0;
+    if (dataRender->timerId != 0) {
+        SDL_RemoveTimer(dataRender->timerId);
+        dataRender->timerId = 0;
         INFO("Removed render timer");
     }
 
-    if (timerUpdate != 0) {
-        SDL_RemoveTimer(timerUpdate);
-        timerUpdate = 0;
+    if (dataUpdate->timerId != 0) {
+        SDL_RemoveTimer(dataUpdate->timerId);
+        dataUpdate->timerId = 0;
         INFO("Removed update timer");
     }
 }
@@ -251,10 +271,10 @@ std::unique_ptr<event::Event> Wrapper::WaitEvent() {
         if (SDL_WaitEvent(&sdlEvent) == 0) {
             throw SDLException("SDL_WaitEvent");
         }
-        if (sdlEvent.type == eventTypeRender) {
+        if (sdlEvent.type == dataRender->eventType) {
             event = std::make_unique<event::Event>(event::EventType::RENDER);
         }
-        else if (sdlEvent.type == eventTypeUpdate) {
+        else if (sdlEvent.type == dataUpdate->eventType) {
             event = std::make_unique<event::Event>(event::EventType::UPDATE);
         }
         else {
@@ -284,24 +304,6 @@ SDL_Renderer* Wrapper::GetRenderer() const {
     return renderer;
 }
 
-Uint32 RenderCallback(Uint32 interval, void* param) {
-    SDL_Event event;
 
-    memset(&event, 0, sizeof(SDL_Event));
-    event.type = *(Uint32*)param;
-    SDL_PushEvent(&event);
-
-    return interval;
-}
-
-Uint32 UpdateCallback(Uint32 interval, void* param) {
-    SDL_Event event;
-
-    memset(&event, 0, sizeof(SDL_Event));
-    event.type = *(Uint32*)param;
-    SDL_PushEvent(&event);
-
-    return interval;
-}
 
 }

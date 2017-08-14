@@ -8,7 +8,9 @@ Game::Game(const Size<int>& windowSize):
     atlas { sdlWrapper, Size<int>{ 51, 51 }, Size<int>{ 4000, 4000 } },
     landscapeGenerator { sdlWrapper, atlas, rng.Random() },
     map { Size<int>{ 40, 40 }, landscapeGenerator },
-    unitManager { atlas, sdlWrapper } {
+    unitManager { atlas, sdlWrapper },
+    fpsHandler { 30 },
+    upsHandler { 30 } {
 
 
     INFO(StringFormat("Game seed: %u", rng.GetSeed()));
@@ -17,16 +19,20 @@ Game::Game(const Size<int>& windowSize):
 void Game::Loop() {
     bool quit = false;
 
-    sdlWrapper.StartTimers();
+    sdlWrapper.StartTimers(fpsHandler, upsHandler);
 
     while (!quit) {
         auto event = sdlWrapper.WaitEvent();
         switch (event->GetType()) {
         case event::EventType::RENDER:
+            fpsHandler.StartTimer();
             Render();
+            fpsHandler.StopTimerAndAlign();
             break;
         case event::EventType::UPDATE:
+            upsHandler.StartTimer();
             Update();
+            upsHandler.StopTimerAndAlign();
             break;
         case event::EventType::QUIT:
             INFO("Received quit event");
@@ -62,6 +68,13 @@ void Game::Render() {
 
 void Game::Update() {
     HandleUnits();
+    sdlWrapper.SetWindowTitle(StringFormat("fps: %d, t: %d ms, d: %d ms | ups: %d, t: %d ms, d: %d ms",
+        fpsHandler.GetFrequency(),
+        fpsHandler.GetLastTime(),
+        fpsHandler.GetDelay(),
+        upsHandler.GetFrequency(),
+        upsHandler.GetLastTime(),
+        upsHandler.GetDelay()));
 }
 
 void Game::HandleKeyDown(event::EventKeyDown& event) {
@@ -76,7 +89,7 @@ void Game::HandleKeyDown(event::EventKeyDown& event) {
 
 void Game::HandleUnits() {
 
-    while (unitManager.GetUnitCount() < 20) {
+    while (unitManager.GetUnitCount() < 50) {
         unitManager.CreateTestUnit(map.GetRandomTraversableTile(rng));
     }
 

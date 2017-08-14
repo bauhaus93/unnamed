@@ -17,17 +17,28 @@
 #include "common/Size.h"
 #include "common/Rect.h"
 #include "common/StringFormat.h"
+#include "frequency_handler/FrequencyHandler.h"
 
 namespace unnamed::sdl {
 
+struct CallbackData {
+    Uint32 eventType;
+    const freq::FrequencyHandler& handler;
+    SDL_TimerID timerId;
+    CallbackData(Uint32 eventType_, const freq::FrequencyHandler& handler_, SDL_TimerID timerId_):
+        eventType { eventType_ },
+        handler { handler_ },
+        timerId { timerId_ } {
+    }
+};
+
+
 class Wrapper {
 
-    SDL_Window*     window;
-    SDL_Renderer*   renderer;
-    SDL_TimerID     timerRender;
-    SDL_TimerID     timerUpdate;
-    Uint32          eventTypeRender;
-    Uint32          eventTypeUpdate;
+    SDL_Window*                      window;
+    SDL_Renderer*                    renderer;
+    std::unique_ptr<CallbackData>    dataRender;
+    std::unique_ptr<CallbackData>    dataUpdate;
 
 public:
 
@@ -50,7 +61,7 @@ public:
         void                    DrawFilledCircle(const Point& origin, int radius, const Color& color);
 
 
-        void                    StartTimers();
+        void                    StartTimers(const freq::FrequencyHandler& fpsHandler, const freq::FrequencyHandler& upsHandler);
         void                    StopTimers();
         std::unique_ptr<event::Event>  WaitEvent();
 
