@@ -97,9 +97,7 @@ void Game::HandleUnits() {
     while (unitManager.HasNextUnit()) {
         unit::Unit& unit = unitManager.GetNextUnit();
         if (!unit.HasDestination()) {
-            std::unique_ptr<map::Path> path = map::FindPath(unit.GetTile(), map.GetRandomTraversableTile(rng));
-            if (path != nullptr)
-                unit.SetDestination(std::move(path));
+            unit.SetDestination(map.GetRandomTraversableTile(rng));
         }
         else {
             unit.WalkDestination();

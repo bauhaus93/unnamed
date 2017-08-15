@@ -4,7 +4,8 @@ namespace unnamed::map {
 
 
 
-Path::Path(PathNode* dest) {
+Path::Path(PathNode* dest, int arrivalRadius_):
+    arrivalRadius { arrivalRadius_ } {
 
     Tile* prevTile = nullptr;
     for (PathNode* curr = dest; curr != nullptr; curr = curr->GetPredecessor()) {
@@ -48,7 +49,7 @@ Size<double> Path::GetMoveOffset(const Point& pos) {
 
 Waypoint& Path::GetCurrentWaypoint(const Point& pos) {
     //DEBUG(StringFormat("Distance to wp: %d", waypoints.back().GetDistance(pos)));
-    if(waypoints.back().GetDistance(pos) < 5) {
+    if(waypoints.back().GetDistance(pos) < arrivalRadius) {
         waypoints.pop_back();
     }
     return waypoints.back();

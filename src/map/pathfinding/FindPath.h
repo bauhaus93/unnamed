@@ -11,6 +11,6 @@
 
 namespace unnamed::map {
 
-std::unique_ptr<Path> FindPath(Tile* src, Tile* dest);
+std::unique_ptr<Path> FindPath(Tile* src, Tile* dest, int arrivalRadius);
 
 }

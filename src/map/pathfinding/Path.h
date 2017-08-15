@@ -10,14 +10,16 @@ namespace unnamed::map {
 
 class Path {
 
+    int                    arrivalRadius;
     std::vector<Waypoint>  waypoints;
+
 
 
     Waypoint&           GetCurrentWaypoint(const Point& pos);
 
 public:
 
-    explicit            Path(PathNode* dest);
+                        Path(PathNode* dest, int arrivalRadius_);
 
     Size<double>        GetMoveOffset(const Point& pos);
     bool                ReachedDestination() const;

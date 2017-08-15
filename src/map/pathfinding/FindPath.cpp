@@ -5,7 +5,7 @@ namespace unnamed::map {
 int DistanceHeuristic(Tile* curr, map::Tile* dest);
 PathNode* GetNodeFromList(Tile* tile, std::vector<PathNode*>& list);
 
-std::unique_ptr<Path> FindPath(Tile* src, Tile* dest) {
+std::unique_ptr<Path> FindPath(Tile* src, Tile* dest, int arrivalRadius) {
     std::vector<PathNode*> openSet;
     std::vector<PathNode*> closedSet;
 
@@ -22,7 +22,7 @@ std::unique_ptr<Path> FindPath(Tile* src, Tile* dest) {
         //std::push_heap(closedSet.begin(), closedSet.end(), PathOrder);
 
         if (currNode->GetTile() == dest) {
-            std::unique_ptr<Path> path = std::make_unique<Path>(currNode);
+            std::unique_ptr<Path> path = std::make_unique<Path>(currNode, arrivalRadius);
             while (!openSet.empty()) {
                 delete openSet.back();
                 openSet.pop_back();
