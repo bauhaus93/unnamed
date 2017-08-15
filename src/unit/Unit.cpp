@@ -15,9 +15,9 @@ bool Unit::HasDestination() const {
     return currDest != nullptr;
 }
 
-void Unit::SetDestination(std::unique_ptr<map::Path> path) {
-    DEBUG(StringFormat("Unit @ (%d/%d) has new destination: (%d/%d)"));
-    currDest = std::move(path);
+void Unit::SetDestination(map::Tile* destTile) {
+    currDest = map::FindPath(GetTile(), destTile, speed);
+    //TODO feedback if not reachable
 }
 
 void Unit::WalkDestination() {

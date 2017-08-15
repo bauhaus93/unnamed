@@ -6,6 +6,7 @@
 #include "common/Rect.h"
 #include "atlas/Element.h"
 #include "map/pathfinding/Path.h"
+#include "map/pathfinding/FindPath.h"
 #include "map/tile/Tile.h"
 
 namespace unnamed::unit {
@@ -27,7 +28,7 @@ public:
                         Unit(map::Tile* initialTile, std::shared_ptr<atlas::Element>& sprite_);
 
     bool                HasDestination() const;
-    void                SetDestination(std::unique_ptr<map::Path> destination);
+    void                SetDestination(map::Tile* destTile);
     void                WalkDestination();
     void                UpdateTile();
 
